@@ -41,7 +41,7 @@
     "webpack-cli": "^6.0.1",
     "webpack-dev-server": "^5.2.2",
     "webpack-merge": "^6.0.1",
-    "zxreact-components": "^1.0.3"
+    "zxreact-components": "^1.0.5"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.11"

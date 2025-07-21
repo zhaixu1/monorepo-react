@@ -1,6 +1,6 @@
 {
   "name": "zxreact-components",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "description": "react 组件库",
   "main": "dist/index.cjs.js",
   "module": "dist/index.es.js",
@@ -12,6 +12,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:types": "tsc --emitDeclarationOnly",
     "build": "pnpm run build:types && vite build",
+    "build:vite": "vite build",
     "publish": "npm publish --access public"
   },
   "keywords": [

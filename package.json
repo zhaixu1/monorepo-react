@@ -9,7 +9,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node scripts/start.mjs",
     "build": "node scripts/build.mjs",
-    "site": "set NODE_OPTIONS=--openssl-legacy-provider && dumi dev"
+    "site": "set NODE_OPTIONS=--openssl-legacy-provider && dumi dev",
+    "build:doc": "set NODE_OPTIONS=--openssl-legacy-provider dumi build"
   },
   "keywords": [],
   "author": "",

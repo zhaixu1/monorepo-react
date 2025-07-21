@@ -5,7 +5,7 @@ import { Outlet, RouteObject } from "react-router-dom";
 import Home from "../pages/home/index";
 import RecommendList from "../components/RecommendList";
 import { TextEllipsis, Button } from "zxreact-components";
-import 'zxreact-components/dist/zxreact-components.css'; 
+import 'zxreact-components/dist/index.css'
 
 export interface extraBizObj {
   title?: string;
