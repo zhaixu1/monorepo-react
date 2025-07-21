@@ -1,0 +1,1 @@
+import{useState as t,useMemo as n}from"react";function r(r,e){void 0===r&&(r=!1);var u=t(r),o=u[0],i=u[1];return[o,n(function(){var t=void 0===e?!r:e;return{toggle:function(){return i(function(n){return n===r?t:r})},set:function(t){return i(t)},setLeft:function(){return i(r)},setRight:function(){return i(t)}}},[])]}export{r as default};

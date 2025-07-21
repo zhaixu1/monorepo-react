@@ -1,0 +1,12 @@
+@import 'tailwindcss'
+
+/* @import 'tailwindcss/base'; */
+/* @theme {
+    --spacing-unit: 0.25rem;
+    --spacing-4: calc(var(--spacing-unit) * 4)
+} */
+
+/* 
+    响应式断点能力
+    
+*/

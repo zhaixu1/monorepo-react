@@ -1,0 +1,36 @@
+{
+  "name": "monorepo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "preinstall": "npx only-allow pnpm",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node scripts/start.mjs",
+    "build": "node scripts/build.mjs",
+    "site": "set NODE_OPTIONS=--openssl-legacy-provider && dumi dev"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-plugin-import": "^1.13.8",
+    "eslint": "^9.30.0",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-prettier": "^5.5.1",
+    "prettier": "^3.6.2",
+    "zxreact-hooks": "workspace:*"
+  },
+  "dependencies": {
+    "antd": "^5.26.4",
+    "cross-env": "^7.0.3",
+    "dumi": "^1.1.48",
+    "fs-extra": "^11.3.0",
+    "kleur": "^4.1.5",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.4"
+  }
+}

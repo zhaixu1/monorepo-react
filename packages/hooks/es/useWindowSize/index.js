@@ -1,0 +1,1 @@
+import{useState as n,useEffect as i}from"react";var e=function(){var e=n({width:window.innerWidth,height:window.innerHeight}),t=e[0],r=e[1];return i(function(){var n=function(){r({width:window.innerWidth,height:window.innerHeight})};return window.addEventListener("resize",n),function(){window.removeEventListener("resize",n)}},[]),t};export{e as default};

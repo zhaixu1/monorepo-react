@@ -1,0 +1,1 @@
+"use strict";var e=require("./useToggle/index.js"),s=require("./useStorage/index.js"),u=require("./useFocus/index.js"),r=require("./useWindowSize/index.js");exports.useToggle=e.default,exports.useStorage=s.default,exports.useFocus=u.default,exports.useWindowSize=r.default;

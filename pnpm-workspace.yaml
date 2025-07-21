@@ -1,0 +1,5 @@
+# 根目录，包含workspace下的所有包
+packages:
+  - 'packages/*'
+  - 'apps/*'
+  - 'scripts/*'

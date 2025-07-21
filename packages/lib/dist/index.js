@@ -1,0 +1,1 @@
+"use strict";Object.defineProperty(exports,Symbol.toStringTag,{value:"Module"});function e(n,t){return n+t}function i(n,t){return n-t}function o(n){return console.log("is not dist"),n==null}exports.add=e;exports.isUndef=o;exports.minus=i;

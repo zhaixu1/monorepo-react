@@ -1,0 +1,1 @@
+"use strict";Object.defineProperty(exports,"__esModule",{value:!0});var e=require("react");exports.default=function(){var r=e.useRef(null),u=e.useCallback(function(){var e;null===(e=null==r?void 0:r.current)||void 0===e||e.focus()},[]);return[r,u]};

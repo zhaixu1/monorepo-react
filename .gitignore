@@ -1,0 +1,9 @@
+**/node_modules
+**/node_modules/*
+node_modules
+*.log
+/.dumi/*
+/.umi/*
+**/coverage/*
+# 如果之前有 pnpm-lock.yaml 相关规则，注释掉或删除
+pnpm-lock.yaml

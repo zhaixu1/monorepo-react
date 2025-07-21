@@ -1,0 +1,14 @@
+{
+  "compolerOptions": {
+    "baseUrl": "./",
+    "target": "esnext",
+    "paths": {
+      "@/*": [
+        "src/*"
+      ]
+    }
+  },
+  "include": [
+    "src/**/*.ts"
+  ],
+}
