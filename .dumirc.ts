@@ -5,13 +5,13 @@ export default defineConfig({
   // 如果部署在非根目录，需要配置为 /xxx/
   base: '/',
   publicPath: '/',
-  logo: './docs/assets/hero.jpg',
+//   logo: '/docs/assets/images.png',
   // history: { type: 'hash' }, // 如果需要 hash 路由，可以放开
   // alias: {
   //   '@hooks': process.cwd() + '/packages/hooks/src/index.ts',
   // },
   resolve: {
-    // aripc cnpm antd antd-mobile
+    // 解析目录
     atomDirs: [
       { type: 'hook', dir: 'packages/hooks/src' },
       { type: 'component', dir: 'packages/components/src' },
