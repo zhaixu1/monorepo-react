@@ -10,7 +10,7 @@
     "start": "node scripts/start.mjs",
     "build": "node scripts/build.mjs",
     "site": "set NODE_OPTIONS=--openssl-legacy-provider && dumi dev",
-    "build:doc": "set NODE_OPTIONS=--openssl-legacy-provider dumi build"
+    "build:doc": "set NODE_OPTIONS=--openssl-legacy-provider && dumi build"
   },
   "keywords": [],
   "author": "",
