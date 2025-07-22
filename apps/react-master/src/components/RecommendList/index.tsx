@@ -3,6 +3,7 @@ import { mockList } from './mockList';
 import { apiGet } from '../../aps/request';
 // import { apiGet } from '../../../../apis/request';
 // import { sendLog } from '../../../../utils/store/lib/apis';
+import { useToggle } from "zxreact-hooks"
 
 interface ItemProps {
     item: any
@@ -11,6 +12,7 @@ interface ItemProps {
 const RecommendData: FC<ItemProps> = ({ item }) => {
 
     const [ selected, setSelected ] = useState<boolean>(false);
+    const [ value, { toggle, setLeft}] = useToggle('哈哈哈', '呵呵呵');
 
     const handleClick: MouseEventHandler<Element> = (event) => {
         event?.preventDefault();
@@ -29,6 +31,7 @@ const RecommendData: FC<ItemProps> = ({ item }) => {
         `https://zhuanlan.zhihu.com/p/${item?.target?.id}`;
 
     return <div className='flex flex-col items-start p-4 border-t'>
+        <button>按钮</button> {`${value}`}
         {/* 标题部分 */}
         <div className='h-auto flex justify-start'>
             <a 
@@ -154,9 +157,11 @@ const useRefInsObsEffect = (ref: RefObject<HTMLDivElement>) => {
 function RecommendList({}: Props) {
     const scrollRef = useRef<HTMLDivElement>(null);
     const [list, len] = useRefInsObsEffect(scrollRef);
-
+    const [value, { toggle }] = useToggle("哈哈哈", '哦哦哦')
+ 
   return (
     <div className='flex flex-col border-t'>
+        <button onClick={toggle}>切换</button> {`${value}`}
         <h1>当前一共{len}条数据</h1>
         {
             list.map((item: any, idx:number) => <RecommendData key={item.id + idx} item={item} />)

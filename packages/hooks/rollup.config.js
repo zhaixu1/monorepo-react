@@ -80,25 +80,25 @@ export default [
       dts(), // 找到ts文件，按照目录进行输出
     ],
   },
-  {
-    // dist cdn 打包
-    // // 不允许文件分割，在一个文件中 UMD 和 IIFE 格式要求所有代码打包为单个文件
-    input: {
-      index: "src/index.ts",
-    },
-    output: {
-      dir: "dist",
-      format: "umd",
-      name: "zxReactHooks",
-    },
-    plugins: [
-      resolve(),
-      commonjs(),
-      typescript({
-        tsconfig: "./tsconfig.json",
-        declaration: false, // 类型文件单独打包
-      }),
-      terser(),
-    ],
-  },
+//   {
+//     // dist cdn 打包
+//     // // 不允许文件分割，在一个文件中 UMD 和 IIFE 格式要求所有代码打包为单个文件
+//     input: {
+//       index: "src/index.ts",
+//     },
+//     output: {
+//       dir: "dist",
+//       format: "umd",
+//       name: "zxReactHooks",
+//     },
+//     plugins: [
+//       resolve(),
+//       commonjs(),
+//       typescript({
+//         tsconfig: "./tsconfig.json",
+//         declaration: false, // 类型文件单独打包
+//       }),
+//       terser(),
+//     ],
+//   },
 ];

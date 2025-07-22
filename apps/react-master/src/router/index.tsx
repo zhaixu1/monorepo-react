@@ -6,6 +6,7 @@ import Home from "../pages/home/index";
 import RecommendList from "../components/RecommendList";
 import { TextEllipsis, Button } from "zxreact-components";
 import 'zxreact-components/dist/index.css'
+import { useToggle } from "zxreact-hooks";
 
 export interface extraBizObj {
   title?: string;
@@ -26,7 +27,7 @@ export const router = [
       { path: 'hot', element: <div>
         <Button>热榜</Button>
       </div> },
-      { path: 'zvideo', element: <div>视频</div> },
+      { path: 'zvideo', element: <div></div> },
     ],
   },
   { path: 'hot', element: <div>热榜</div> },

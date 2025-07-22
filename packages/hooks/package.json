@@ -1,6 +1,6 @@
 {
   "name": "zxreact-hooks",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "zxReact Hooks Library",
   "type": "module",
   "main": "./lib/index.js",
