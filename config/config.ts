@@ -5,7 +5,8 @@ import { componentMenu } from "./components";
 const packages = require('../packages/hooks/package.json'); // 获取 package.json
 
 export default {
-  publicPath: './',  
+  publicPath: '/monorepo-react',  // 配置打包后的静态文件路径，也就是github仓库地址。网站路径上会加上你的仓库名
+  base: "/monorepo-react", 
   exportStatic: {}, // 配置 html 的输出形式，默认只输出 index.html。
   nodeModulesTransform: {
     type: "none", //all 前者速度较慢，但可规避常见的兼容性等问题，后者反之。
