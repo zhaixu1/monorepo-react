@@ -5,3 +5,9 @@ node18+， 全局安装 pnpm，
 
 ## 下载依赖
 pnpm install 下载所有依赖
+
+# Hook库
+## 下载地址
+npm官网： https://www.npmjs.com/package/zxreact-hooks 
+
+npm install zxreact-hooks --save
