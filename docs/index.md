@@ -1,13 +1,14 @@
 ---
 title: 首页
 hero:
-  image: 'http://gips0.baidu.com/it/u=3822353666,2757632348&fm=3028&app=3028&f=JPEG&fmt=auto?w=720&h=1280'
-  desc: '基于Ant Design 封装的组件库 以及常用 hooks'
+  image: './assets/hero.jpg'
+  description: '基于Ant Design 封装的组件库 以及常用 hooks'
   actions:
     - text: Hooks 列表
       link: /hooks
     - text: 组件列表
       link: /components
+
 ---
 
 

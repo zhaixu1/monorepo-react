@@ -9,8 +9,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node scripts/start.mjs",
     "build": "node scripts/build.mjs",
-    "site": "set NODE_OPTIONS=--openssl-legacy-provider && dumi dev",
-    "build:doc": "set NODE_OPTIONS=--openssl-legacy-provider && dumi build"
+    "site": "dumi dev",
+    "build:doc": "dumi build"
   },
   "keywords": [],
   "author": "",
@@ -26,7 +26,7 @@
   "dependencies": {
     "antd": "^5.26.4",
     "cross-env": "^7.0.3",
-    "dumi": "^1.1.48",
+    "dumi": "^2.4.21",
     "fs-extra": "^11.3.0",
     "kleur": "^4.1.5",
     "react": "^19.1.0",
