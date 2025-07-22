@@ -3,8 +3,9 @@ import { defineConfig } from 'dumi';
 export default defineConfig({
   // base 和 publicPath 一般推荐配置为 /
   // 如果部署在非根目录，需要配置为 /xxx/
-  base: '/',
-  publicPath: '/',
+  base: '/monorepo-react/',
+  publicPath: '/monorepo-react/',
+  outputPath: 'dist',
 //   logo: '/docs/assets/images.png',
   // history: { type: 'hash' }, // 如果需要 hash 路由，可以放开
   // alias: {
