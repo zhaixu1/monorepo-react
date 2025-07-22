@@ -5,6 +5,7 @@ import { componentMenu } from "./components";
 const packages = require('../packages/hooks/package.json'); // 获取 package.json
 
 export default {
+  publicPath: './',  
   exportStatic: {}, // 配置 html 的输出形式，默认只输出 index.html。
   nodeModulesTransform: {
     type: "none", //all 前者速度较慢，但可规避常见的兼容性等问题，后者反之。
