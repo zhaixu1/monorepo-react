@@ -20,6 +20,7 @@
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
     "@types/react-router-dom": "^5.3.3",
+    "antd": "^5.26.4",
     "autoprefixer": "^10.4.21",
     "axios": "^1.10.0",
     "babel-loader": "^10.0.0",
@@ -41,7 +42,7 @@
     "webpack-cli": "^6.0.1",
     "webpack-dev-server": "^5.2.2",
     "webpack-merge": "^6.0.1",
-    "zxreact-components": "^1.0.5",
+    "zxreact-components": "^1.0.7",
     "zxreact-hooks": "^1.0.7"
   },
   "devDependencies": {

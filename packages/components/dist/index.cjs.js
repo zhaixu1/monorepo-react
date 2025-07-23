@@ -1,1 +1,1 @@
-"use strict";Object.defineProperty(exports,Symbol.toStringTag,{value:"Module"});const e=require("./Button/index.cjs.js"),t=require("./TextEllipsis/index.cjs.js");exports.Button=e;exports.TextEllipsis=t;
+"use strict";Object.defineProperty(exports,Symbol.toStringTag,{value:"Module"});const e=require("./Button/index.cjs.js"),t=require("./TextEllipsis/index.cjs.js"),i=require("./Modal/index.cjs.js");exports.Button=e;exports.TextEllipsis=t;exports.Modal=i;
