@@ -31,4 +31,4 @@ jobs:
         with:
           BRANCH: gh-pages
           FOLDER: dist
-          ACCESS_TOKEN: ${{ secrets.REACT_PROJECT }}
+          ACCESS_TOKEN: ${{ secrets.zxreact-component-hooks }}
