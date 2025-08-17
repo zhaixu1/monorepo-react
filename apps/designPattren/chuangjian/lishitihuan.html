@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+    // 里氏替换原则示例
+    // 父类
+    class Bird {
+        fly() {
+            console.log('鸟在飞');
+        }
+    }
+
+    // 子类：麻雀，继承鸟，可以飞
+    class Sparrow extends Bird {
+        fly() {
+            console.log('麻雀在飞');
+        }
+    }
+
+    // 子类：鸵鸟，继承鸟，但不能飞
+    class Ostrich extends Bird {
+        fly() {
+            throw new Error('鸵鸟不会飞！');
+        }
+    }
+
+    // 测试函数，期望所有鸟都能飞
+    function makeBirdFly(bird) {
+        bird.fly();
+    }
+
+    // 正确使用
+    const sparrow = new Sparrow();
+    makeBirdFly(sparrow); // 输出：麻雀在飞
+
+    // 错误示例：鸵鸟不能飞，违背了里氏替换原则
+    const ostrich = new Ostrich();
+    try {
+        makeBirdFly(ostrich); // 抛出异常：鸵鸟不会飞！
+    } catch (e) {
+        console.log('错误：' + e.message);
+    }
+
+    // 结论：子类应当可以替换父类，且程序逻辑不出错，否则违背了里氏替换原则
+    </script>
+</body>
+</html>
