@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+    </head>
+    <body>
+        <script>
+            const arrayFn2 = [
+                (req, next) => {
+                    console.log("进入函数1，参数:", req, next);
+                    next(req + " -> 经过函数1");
+                },
+                (req, next) => {
+                    console.log("进入函数2，参数:", req, next);
+                    next(req + " -> 经过函数2");
+                },
+            ];
+
+            // 正确的 reduceRight 组合方式
+            const composed = arrayFn2.reduceRight(
+                (next, fn) => {
+                    console.log("next", next);
+                    console.log("fn", fn);
+
+                    return (req) => fn(req, next);
+                },
+                (final) => {
+                    console.log("最终结果:", final);
+                }
+            );
+
+            // 执行组合后的函数
+            composed("初始数据");
+        </script>
+    </body>
+</html>
