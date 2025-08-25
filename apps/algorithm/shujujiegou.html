@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 链表
+        /**
+         * 链表不需要连续的内存空间，每个节点中，内容后继指针，
+         * 单链表，双链表，循环链表
+         * 
+         * 双链表和单链表很相似，区别在于，单链表只有后继指针，
+         * 双链表除了后继指针，还有一个前驱指针
+        */
+
+        
+
+        function List() {
+            let Node = function(element) {
+                this.element = element;
+                this.next = null;
+            }
+
+            let head = null;
+
+            let length = 0;
+
+            this.getList = function() {
+                return head;
+            }
+
+            this.search = function(element) {
+                let current = head;
+                while(current) {
+                    if(current.element === element) {
+                        console.log(current);
+                        
+                        return true
+                    }
+                    current = current.next;
+                }
+                return false;
+            }
+            
+            // 追加节点
+            this.append = function(element) {
+                let node = new Node(element);
+                let current = head;
+                if(!current) {
+                    head = node;
+                    console.log(head);
+                    
+                } else {
+                    while(current.next) {
+                        current = current.next;
+                    }
+                    current.next = node;
+                }
+                length++;
+            }
+
+            this.insert = function(position, element) {
+                let node = new Node(element);
+                if (position < 0 || position > length) {
+                    console.error('插入位置不合法');
+                    return false;
+                }
+                if (position === 0) {
+                    node.next = head;
+                    head = node;
+                } else {
+                    // 这段代码实现了在链表的指定位置插入新节点的功能，具体步骤如下：
+                    // 1. 定义current指向链表头部head，previous为null，index为0，表示当前遍历到的位置。
+                    let current = head;
+                    let previous = null;
+                    let index = 0;
+                    // 2. 通过while循环遍历链表，直到index等于目标插入位置position。
+                    //    每次循环，previous保存当前节点，current向后移动到下一个节点，index自增。
+                    while (index < position) {
+                        
+                        
+                        previous = current;      // previous始终指向current的前一个节点
+                        current = current.next;  // current向后移动
+                        index++;
+
+                        console.log('insert', previous, current, index);
+                    }
+                    // 3. 循环结束后，previous指向插入点的前一个节点，current指向插入点原本的节点
+                    //    将新节点node的next指向current，把previous的next指向node，完成插入
+                    node.next = current;         // 新节点的next指向插入位置的原节点
+                    // 这里将previous.next指向新节点node，相当于把前一个节点“连接”到了新节点
+                    // 由于链表的每个节点都只保存对下一个节点的引用（next），
+                    // 所以前面的节点通过next链式连接，结构不会断裂。
+                    // 例如：A -> B -> C，若在B和C之间插入D，操作如下：
+                    // 1. previous = B, current = C
+                    // 2. node = D, node.next = current (即D.next = C)
+                    // 3. previous.next = node (即B.next = D)
+                    // 那么A是如何连接到B的呢？因为A的next本来就指向B，这个引用在插入操作中没有被修改，
+                    // 所以A依然通过A.next连接到B，链表结构不会断裂。
+                    console.log('previous', previous, 'node', node);
+                    
+                    // 结果：A -> B -> D -> C，前面的节点依然通过next引用连接到后续节点
+                    previous.next = node;        // 前一个节点的next指向新节点
+                    // 这样链表结构就被正确地插入了新节点
+                }
+                // length变量用于记录链表的节点个数，每插入一个节点就自增1
+                length++;
+                return true;
+            }
+
+            // 删除
+            this.remove = function(element) {
+                let previous = head; // 前一个节点
+                let current = head; // 当前节点
+                if(!head) {
+                    return false;
+                }
+                // 这段代码有明显错误，不能正确删除链表中的指定元素。
+                // 主要问题有：
+                // 1. 变量名拼写错误：prev 和 p 未定义，应该用 previous 和 current。
+                // 2. 删除头节点时没有特殊处理。
+                // 3. 删除后没有及时返回或跳出循环，可能导致链表结构混乱。
+                // 正确写法如下：
+
+                // 如果要删除的元素在头节点
+                if (head.element === element) {
+                    head = head.next;
+                    length--;
+                    return true;
+                }
+                // 删除非头节点
+                while (current) {
+                    if (current.element === element) {
+                        previous.next = current.next;
+                        length--;
+                        return true;
+                    } else {
+                        previous = current;
+                        current = current.next;
+                    }
+                }
+                return false;
+            }
+
+            this.isEmpty = function() {
+                return length === 0;
+            }
+
+            this.size = function() {
+                return length;
+            }
+
+            this.toString = function() {
+                let current = head;
+            }
+
+        }
+
+        let list = new List();
+        list.append(1);
+        list.append(2);
+        list.append(3);
+        console.log(list.getList());
+
+        console.log(list.search(2));
+        console.log(list.insert(2, 4));
+        console.log(list.getList());
+        console.log(list.remove(2));
+        console.log(list.getList());
+        
+    </script>
+</body>
+</html>

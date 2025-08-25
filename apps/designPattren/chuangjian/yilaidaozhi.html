@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 依赖倒置
+        // 抽象插件接口
+        class Plugin {
+            apply() {
+                throw new Error('apply方法需要被实现');
+            }
+        }
+
+        // 具体插件A
+        class LoggerPlugin extends Plugin {
+            apply() {
+                console.log('日志插件已应用');
+            }
+        }
+
+        // 具体插件B
+        class AuthPlugin extends Plugin {
+            apply() {
+                console.log('认证插件已应用');
+            }
+        }
+
+        // 插件管理器，高层模块依赖于抽象插件
+        class PluginManager {
+            constructor() {
+                this.plugins = [];
+            }
+            register(plugin) {
+                if (plugin instanceof Plugin) {
+                    this.plugins.push(plugin);
+                } else {
+                    throw new Error('必须继承自Plugin');
+                }
+            }
+            runAll() {
+                this.plugins.forEach(plugin => plugin.apply());
+            }
+        }
+
+        // 使用
+        const manager = new PluginManager();
+        manager.register(new LoggerPlugin());
+        manager.register(new AuthPlugin());
+        manager.runAll();
+       
+    </script>
+</body>
+</html>
