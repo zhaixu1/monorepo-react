@@ -1,15 +1,53 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <script>
-        function insertSort(arr) {
-            
-        }
-    </script>
-</body>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+    </head>
+    <body>
+        <script>
+            /**
+             * - 从第一个元素开始，该元素可以认为已经被排序；
+               - 取出下一个元素，在已经排序的元素序列中从后向前扫描；
+               - 如果该元素（已排序）大于新元素，将该元素移到下一位置；
+               - 重复步骤 3，直到找到已排序的元素小于或者等于新元素的位置；
+               - 将新元素插入到该位置后；
+               - 重复步骤 2 ~ 5。
+            */
+            const arr = [2, 3, 1];
+            function insertSort(arr) {
+                const length = arr.length;
+                if (length <= 1) return arr;
+                let preIndex, current;
+                for (let i = 1; i < length; i++) {
+                    preIndex = i - 1; // preIndex 是current的上一个元素指针
+                    current = arr[i]; // current 是当前元素
+                    while(preIndex >= 0 && arr[preIndex] > current) {
+                        // 如果preIndex的值大于current的值，则将preIndex的值赋给preIndex+1
+                        arr[preIndex + 1] = arr[preIndex]; // 此时 当前索引是preIndex+1，值是preIndex的值
+                        preIndex--; // 将preIndex指针向前移动
+                    }
+                    arr[preIndex + 1] = current;
+                }
+                return arr;
+            }
+            console.log(insertSort(arr), 'insertSort');
+            //  3 2 1 -> 1 2 3
+            /*
+                3 2 1 
+                i -> 1 , preIndex -> 0, current -> 2,
+                while(3 > 2) -> 2 3 1
+                i -> 2 , preIndex -> 1, current -> 1,
+                while( 3 > 1) -> 2 3 3 preIndex-- -> preIndex -> 0
+                while(2 > 1) -> 2 2 3 preIndex-- -> preIndex -> -1
+                while(-1 > 1) -> break
+                arr[preIndex + 1] = current -> arr[0] = 1 -> 1 2 3
+                
+            */
+
+
+
+        </script>
+    </body>
 </html>
