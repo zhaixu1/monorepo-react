@@ -53,7 +53,7 @@ function combineReducers(reducers) {
 // 实现原理：
 // 1. applyMiddleware 接收若干中间件函数（middlewares）。
 // 2. 返回一个新的 createStore 增强器（高阶函数）。
-// 3. 该增强器在创建 store 时，先生成原始 store，然后用中间件链包裹原始的 dispatch 方法，形成新的 dispatch。
+// 3. 该增强器在创建 store 时，先生成原始 store，然后用中间件链包裹原始的 dispatch 方法，形l成新的 dispatch。
 // 4. 每个中间件都可以拿到 getState 和 dispatch（已被中间件链包裹），实现对 action 的处理和分发。
 // 5. 最终返回的 store，dispatch 已经被中间件链增强，可以支持异步、日志等功能。
 // 这样，开发者可以通过中间件机制灵活扩展 Redux 的功能。

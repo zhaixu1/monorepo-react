@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>简易 Vue 响应式框架测试</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            color: #42b983;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 32px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .demo-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #42b983;
+        }
+
+        .demo-section h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+
+        .demo-content {
+            display: grid;
+            gap: 15px;
+        }
+
+        .input-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .input-group label {
+            min-width: 120px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .input-group input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #42b983;
+        }
+
+        .output {
+            background: white;
+            padding: 12px;
+            border-radius: 6px;
+            border: 2px solid #e0e0e0;
+            font-family: 'Courier New', monospace;
+            color: #42b983;
+            font-weight: bold;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: #42b983;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            background: #35a372;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(66, 185, 131, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        #console {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 20px;
+            line-height: 1.6;
+        }
+
+        #console .log {
+            margin: 3px 0;
+        }
+
+        #console .log.info {
+            color: #4ec9b0;
+        }
+
+        #console .log.success {
+            color: #b5cea8;
+        }
+
+        #console .log.update {
+            color: #ce9178;
+        }
+
+        #console .log.getter {
+            color: #9cdcfe;
+        }
+
+        .clear-btn {
+            background: #e74c3c;
+            margin-top: 10px;
+        }
+
+        .clear-btn:hover {
+            background: #c0392b;
+        }
+
+        .feature-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .feature-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid #42b983;
+        }
+
+        .feature-item h3 {
+            color: #42b983;
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .feature-item p {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 简易 Vue 响应式框架</h1>
+        <p class="subtitle">基于 Object.defineProperty 实现的响应式系统</p>
+
+        <!-- 功能特性 -->
+        <div class="demo-section">
+            <h2>✨ 功能特性</h2>
+            <div class="feature-list">
+                <div class="feature-item">
+                    <h3>📦 数据劫持</h3>
+                    <p>使用 Object.defineProperty 劫持数据的 getter 和 setter</p>
+                </div>
+                <div class="feature-item">
+                    <h3>🔍 依赖收集</h3>
+                    <p>自动追踪数据依赖，建立数据与视图的关联</p>
+                </div>
+                <div class="feature-item">
+                    <h3>🔄 自动更新</h3>
+                    <p>数据变化时自动通知所有依赖进行更新</p>
+                </div>
+                <div class="feature-item">
+                    <h3>👁️ Watch 监听</h3>
+                    <p>支持 watch 监听数据变化并执行回调</p>
+                </div>
+                <div class="feature-item">
+                    <h3>⚡ 计算属性</h3>
+                    <p>支持 computed 计算属性，自动缓存</p>
+                </div>
+                <div class="feature-item">
+                    <h3>🌳 嵌套对象</h3>
+                    <p>深度观察嵌套对象的属性变化</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 示例 1：基本响应式 -->
+        <div class="demo-section">
+            <h2>📝 示例 1：基本响应式</h2>
+            <div class="demo-content">
+                <div class="input-group">
+                    <label>消息 (message):</label>
+                    <input type="text" id="message" value="Hello Vue!">
+                </div>
+                <div class="input-group">
+                    <label>计数 (count):</label>
+                    <input type="number" id="count" value="0">
+                </div>
+                <div class="output">
+                    输出: <span id="messageOutput">Hello Vue!</span> | 计数: <span id="countOutput">0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 示例 2：计算属性 -->
+        <div class="demo-section">
+            <h2>⚡ 示例 2：计算属性</h2>
+            <div class="demo-content">
+                <div class="input-group">
+                    <label>姓 (lastName):</label>
+                    <input type="text" id="lastName" value="张">
+                </div>
+                <div class="input-group">
+                    <label>名 (firstName):</label>
+                    <input type="text" id="firstName" value="三">
+                </div>
+                <div class="output">
+                    全名 (computed): <span id="fullNameOutput">张三</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 示例 3：嵌套对象 -->
+        <div class="demo-section">
+            <h2>🌳 示例 3：嵌套对象响应式</h2>
+            <div class="demo-content">
+                <div class="input-group">
+                    <label>用户名:</label>
+                    <input type="text" id="userName" value="小明">
+                </div>
+                <div class="input-group">
+                    <label>年龄:</label>
+                    <input type="number" id="userAge" value="25">
+                </div>
+                <div class="output">
+                    用户信息: <span id="userInfoOutput">小明 (25岁)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 控制台输出 -->
+        <div class="demo-section">
+            <h2>📊 控制台输出（响应式日志）</h2>
+            <div id="console"></div>
+            <button class="clear-btn" onclick="clearConsole()">清空日志</button>
+        </div>
+    </div>
+
+    <script type="module">
+        // 重写 console.log，输出到页面
+        const consoleDiv = document.getElementById('console');
+        const originalLog = console.log;
+        
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            const message = args.join(' ');
+            const logDiv = document.createElement('div');
+            logDiv.className = 'log';
+            
+            // 根据内容添加不同样式
+            if (message.includes('[Getter]')) {
+                logDiv.className += ' getter';
+            } else if (message.includes('[Setter]')) {
+                logDiv.className += ' update';
+            } else if (message.includes('✅')) {
+                logDiv.className += ' success';
+            } else {
+                logDiv.className += ' info';
+            }
+            
+            logDiv.textContent = message;
+            consoleDiv.appendChild(logDiv);
+            consoleDiv.scrollTop = consoleDiv.scrollHeight;
+        };
+
+        window.clearConsole = function() {
+            consoleDiv.innerHTML = '';
+        };
+    </script>
+
+    <script src="./SimpleVue.js" type="module"></script>
+    <script type="module">
+        // 导入需要手动添加，这里直接内联简化版
+        
+        // ============ 简化的响应式实现（内联版） ============
+        let uid = 0;
+
+        class Dep {
+            static target = null;
+            constructor() {
+                this.id = uid++;
+                this.subs = [];
+            }
+            addSub(sub) {
+                this.subs.push(sub);
+            }
+            removeSub(sub) {
+                const index = this.subs.indexOf(sub);
+                if (index > -1) this.subs.splice(index, 1);
+            }
+            depend() {
+                if (Dep.target) {
+                    Dep.target.addDep(this);
+                }
+            }
+            notify() {
+                const subs = this.subs.slice();
+                console.log(`[Dep ${this.id}] 通知 ${subs.length} 个订阅者`);
+                subs.forEach(sub => sub.update());
+            }
+        }
+
+        const targetStack = [];
+        function pushTarget(target) {
+            targetStack.push(target);
+            Dep.target = target;
+        }
+        function popTarget() {
+            targetStack.pop();
+            Dep.target = targetStack[targetStack.length - 1];
+        }
+
+        function observe(value) {
+            if (!value || typeof value !== 'object') return;
+            return new Observer(value);
+        }
+
+        class Observer {
+            constructor(value) {
+                this.value = value;
+                this.dep = new Dep();
+                Object.defineProperty(value, '__ob__', {
+                    value: this,
+                    enumerable: false,
+                    writable: true,
+                    configurable: true
+                });
+                this.walk(value);
+            }
+            walk(obj) {
+                Object.keys(obj).forEach(key => defineReactive(obj, key));
+            }
+        }
+
+        function defineReactive(obj, key, val) {
+            const dep = new Dep();
+            if (arguments.length === 2) {
+                val = obj[key];
+            }
+            let childOb = observe(val);
+
+            Object.defineProperty(obj, key, {
+                enumerable: true,
+                configurable: true,
+                get() {
+                    if (Dep.target) {
+                        console.log(`[Getter] ${key} 收集依赖`);
+                        dep.depend();
+                        if (childOb) childOb.dep.depend();
+                    }
+                    return val;
+                },
+                set(newVal) {
+                    if (newVal === val) return;
+                    console.log(`[Setter] ${key}: ${val} -> ${newVal}`);
+                    val = newVal;
+                    childOb = observe(newVal);
+                    dep.notify();
+                }
+            });
+        }
+
+        class Watcher {
+            constructor(vm, expOrFn, cb) {
+                this.vm = vm;
+                this.id = uid++;
+                this.cb = cb;
+                this.deps = [];
+                this.depIds = new Set();
+                this.newDeps = [];
+                this.newDepIds = new Set();
+                debugger
+                if (typeof expOrFn === 'function') {
+                    this.getter = expOrFn;
+                } else {
+                    this.getter = function() {
+                        const segments = expOrFn.split('.');
+                        let obj = vm;
+                        for (let i = 0; i < segments.length; i++) {
+                            if (!obj) return;
+                            obj = obj[segments[i]];
+                        }
+                        return obj;
+                    };
+                }
+                
+                this.value = this.get();
+            }
+            
+            get() {
+                pushTarget(this);
+                let value;
+                try {
+                    value = this.getter.call(this.vm, this.vm);
+                } finally {
+                    popTarget();
+                    this.cleanupDeps();
+                }
+                return value;
+            }
+            
+            addDep(dep) {
+                const id = dep.id;
+                if (!this.newDepIds.has(id)) {
+                    this.newDepIds.add(id);
+                    this.newDeps.push(dep);
+                    if (!this.depIds.has(id)) {
+                        dep.addSub(this);
+                    }
+                }
+            }
+            
+            cleanupDeps() {
+                let i = this.deps.length;
+                while (i--) {
+                    const dep = this.deps[i];
+                    if (!this.newDepIds.has(dep.id)) {
+                        dep.removeSub(this);
+                    }
+                }
+                let tmp = this.depIds;
+                this.depIds = this.newDepIds;
+                this.newDepIds = tmp;
+                this.newDepIds.clear();
+                tmp = this.deps;
+                this.deps = this.newDeps;
+                this.newDeps = tmp;
+                this.newDeps.length = 0;
+            }
+            
+            update() {
+                console.log(`[Watcher-${this.id}] 触发更新`);
+                this.run();
+            }
+            
+            run() {
+                const value = this.get();
+                if (value !== this.value || typeof value === 'object') {
+                    const oldValue = this.value;
+                    this.value = value;
+                    this.cb.call(this.vm, value, oldValue);
+                }
+            }
+        }
+
+        // ============ 创建 Vue 实例 ============
+        
+        // 示例 1：基本响应式
+        const data1 = { message: 'Hello Vue!', count: 0 };
+        observe(data1);
+        console.log(data1, 'data1');
+        
+        new Watcher(data1, 'message', (newVal) => {
+            document.getElementById('messageOutput').textContent = newVal;
+            console.log(`✅ message 更新为: ${newVal}`);
+        });
+        
+        new Watcher(data1, 'count', (newVal) => {
+            document.getElementById('countOutput').textContent = newVal;
+            console.log(`✅ count 更新为: ${newVal}`);
+        });
+        
+        document.getElementById('message').addEventListener('input', (e) => {
+            data1.message = e.target.value;
+        });
+        
+        document.getElementById('count').addEventListener('input', (e) => {
+            data1.count = Number(e.target.value);
+        });
+
+        // 示例 2：计算属性
+        const data2 = { firstName: '三', lastName: '张' };
+        observe(data2);
+        
+        const updateFullName = () => {
+            const fullName = data2.lastName + data2.firstName;
+            document.getElementById('fullNameOutput').textContent = fullName;
+            console.log(`✅ 计算属性 fullName: ${fullName}`);
+        };
+        
+        new Watcher(data2, () => data2.lastName + data2.firstName, updateFullName);
+        
+        document.getElementById('firstName').addEventListener('input', (e) => {
+            data2.firstName = e.target.value;
+        });
+        
+        document.getElementById('lastName').addEventListener('input', (e) => {
+            data2.lastName = e.target.value;
+        });
+
+        // 示例 3：嵌套对象
+        const data3 = { 
+            user: { 
+                name: '小明', 
+                age: 25 
+            } 
+        };
+        observe(data3);
+        
+        const updateUserInfo = () => {
+            const info = `${data3.user.name} (${data3.user.age}岁)`;
+            document.getElementById('userInfoOutput').textContent = info;
+            console.log(`✅ 用户信息更新: ${info}`);
+        };
+        
+        new Watcher(data3, () => data3.user.name + data3.user.age, updateUserInfo);
+        
+        document.getElementById('userName').addEventListener('input', (e) => {
+            data3.user.name = e.target.value;
+        });
+        
+        document.getElementById('userAge').addEventListener('input', (e) => {
+            data3.user.age = Number(e.target.value);
+        });
+
+        console.log('🎉 简易 Vue 响应式框架初始化完成！');
+        console.log('👉 请在上方输入框中修改数据，观察响应式效果');
+    </script>
+</body>
+</html>
+
