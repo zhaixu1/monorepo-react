@@ -5,6 +5,10 @@ function createStore(reducer, initialState) {
 
     const getState = () => state;
 
+    /**
+     * 订阅者
+     * 作用：添加订阅者，当 state 发生变化时，会调用订阅者函数
+     */
     function subscribe(listener) {
         listeners.push(listener);
 
@@ -14,6 +18,11 @@ function createStore(reducer, initialState) {
         }
     }
 
+    /**
+     * 作用：触发 state 更新
+     * 参数：action 是一个对象，必须包含 type 属性，用于标识 action 的类型
+     * 返回值：返回 action 是为了方便链式调用
+     */
     function dispatch(action) {
         if(typeof action !== 'object' || action === null || !action.type) {
             throw new Error('Action must be an object with a type property');
