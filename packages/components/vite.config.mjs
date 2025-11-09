@@ -6,7 +6,7 @@ import fs from 'fs';
 
 // 获取 src 目录下的所有组件入口
 const components = fs.readdirSync(path.resolve(__dirname, 'src'))
-  .filter(file => fs.statSync(path.resolve(__dirname, 'src', file)).isDirectory())
+  .filter(file => fs.statSync(path.resolve(__dirname,' src', file)).isDirectory())
   .filter(dir => !['demo', 'tests', '__tests__'].includes(dir));
 
 // 生成入口文件配置

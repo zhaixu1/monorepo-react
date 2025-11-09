@@ -1,0 +1,38 @@
+{
+  "name": "future-coder-cli",
+  "version": "1.0.0",
+  "description": "zx脚手架",
+  "keywords": ["future-coder-cli"],
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "lib",
+    "template"
+  ],
+  "bin": {
+    "future-coder-cli": "bin/future.js"
+  },
+  "scripts": {
+    "dev": "tsup src/index.ts --watch",
+    "build": "tsup",
+    "release": "pnpm build && pnpm publish",
+    "release:patch": "pnpm version patch && pnpm release",
+    "release:minor": "pnpm version minor && pnpm release",
+    "release:major": "pnpm version major && pnpm release"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/fs-extra": "^11.0.4",
+    "@types/prompts": "^2.4.9",
+    "commander": "^14.0.2",
+    "consola": "^3.4.2",
+    "fs-extra": "^11.3.0",
+    "giget": "^2.0.0",
+    "ora": "^9.0.0",
+    "picocolors": "^1.1.1",
+    "prompts": "^2.4.2",
+    "tsup": "^8.5.0"
+  }
+}
