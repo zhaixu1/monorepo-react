@@ -27,7 +27,7 @@ pnpm build
 ## 启动脚手架
 
 ### 方式一：本地开发测试
-
+****
 1. 首先构建项目：
 ```bash
 cd apps/future-coder-cli

@@ -1,3 +1,328 @@
-"use strict";var U=Object.create;var y=Object.defineProperty;var W=Object.getOwnPropertyDescriptor;var q=Object.getOwnPropertyNames;var B=Object.getPrototypeOf,G=Object.prototype.hasOwnProperty;var J=(e,t)=>{for(var r in t)y(e,r,{get:t[r],enumerable:!0})},j=(e,t,r,i)=>{if(t&&typeof t=="object"||typeof t=="function")for(let s of q(t))!G.call(e,s)&&s!==r&&y(e,s,{get:()=>t[s],enumerable:!(i=W(t,s))||i.enumerable});return e};var p=(e,t,r)=>(r=e!=null?U(B(e)):{},j(t||!e||!e.__esModule?y(r,"default",{value:e,enumerable:!0}):r,e)),K=e=>j(y({},"__esModule",{value:!0}),e);var te={};J(te,{runCLI:()=>ee});module.exports=K(te);var z=require("commander");var x=p(require("picocolors"));var b={name:"future-coder-cli",version:"1.0.0",description:"zx\u811A\u624B\u67B6",keywords:["future-coder-cli"],main:"dist/index.js",types:"dist/index.d.ts",files:["dist","lib","template"],bin:{"future-coder-cli":"bin/future.js"},scripts:{dev:"tsup src/index.ts --watch",build:"tsup",release:"pnpm build && pnpm publish","release:patch":"pnpm version patch && pnpm release","release:minor":"pnpm version minor && pnpm release","release:major":"pnpm version major && pnpm release"},author:"",license:"ISC",dependencies:{"@types/fs-extra":"^11.0.4","@types/prompts":"^2.4.9",commander:"^14.0.2",consola:"^3.4.2","fs-extra":"^11.3.0",giget:"^2.0.0",ora:"^9.0.0",picocolors:"^1.1.1",prompts:"^2.4.2",tsup:"^8.5.0"}};var A=e=>e.command("info").description("\u663E\u793A\u9879\u76EE\u4FE1\u606F").action(()=>{console.log(x.default.green("\u9879\u76EE\u4FE1\u606F")),console.log(x.default.blue("\u7248\u672C\u53F7: "+b.version)),console.log(x.default.blue("\u4F5C\u8005: "+b.author))});var E=p(require("path")),o=p(require("picocolors")),v=p(require("prompts")),N=p(require("ora"));var d=p(require("path"));function g(){try{if(typeof __dirname<"u")return d.default.resolve(__dirname,"../../templates")}catch{}let e=process.cwd();return d.default.resolve(e,"templates")}function X(){return process.cwd()}function $(e){return d.default.isAbsolute(e)?e:d.default.resolve(X(),e)}async function k(e){try{return await(await import("fs-extra")).pathExists(e)}catch{return!1}}var w=p(require("fs-extra"));async function R(e){return await w.default.pathExists(e)?(await w.default.readdir(e)).length===0:!0}async function S(e){await w.default.ensureDir(e)}var c=p(require("fs-extra")),h=p(require("path"));function Y(e){return h.default.resolve(g(),e)}async function V(e){let t=Y(e);return await c.default.pathExists(t)}async function L(){let e=g();return await c.default.pathExists(e)?(await c.default.readdir(e,{withFileTypes:!0})).filter(r=>r.isDirectory()).map(r=>r.name):[]}function _(e,t){let r=e;for(let[i,s]of Object.entries(t)){let n=new RegExp(`\\{\\{\\s*${i}\\s*\\}\\}`,"g");r=r.replace(n,s)}return r}async function Z(e,t){let r=await c.default.readFile(e,"utf-8");return _(r,t)}async function D(e,t,r){await c.default.ensureDir(t);let i=await c.default.readdir(e,{withFileTypes:!0}),s=[".gitignore",".eslintrc",".prettierrc",".editorconfig",".npmrc"];for(let n of i){let m=h.default.join(e,n.name),a=h.default.join(t,_(n.name,r));if(!(n.name.startsWith(".")&&(n.isDirectory()||n.isFile()&&!s.includes(n.name)))){if(n.isDirectory())await D(m,a,r);else if(n.isFile()){let T=await Z(m,r);await c.default.writeFile(a,T,"utf-8")}}}}var M={"react-vite":"React + Vite \u9879\u76EE\u6A21\u677F","vue-vite":"Vue + Vite \u9879\u76EE\u6A21\u677F","node-ts":"Node.js + TypeScript \u9879\u76EE\u6A21\u677F"};var I=e=>e.command("create <project-name>").description("\u521B\u5EFA\u4E00\u4E2A\u65B0\u9879\u76EE").option("-t, --template <template>","\u6307\u5B9A\u6A21\u677F\u540D\u79F0").option("-f, --force","\u5F3A\u5236\u8986\u76D6\u5DF2\u5B58\u5728\u7684\u76EE\u5F55").action(async(t,r)=>{try{t||(console.error(o.default.red("\u9519\u8BEF: \u8BF7\u63D0\u4F9B\u9879\u76EE\u540D\u79F0")),process.exit(1));let i=$(t),s=E.default.basename(i);if(await k(i)&&!r.force&&!await R(i)){let{overwrite:f}=await(0,v.default)({type:"confirm",name:"overwrite",message:`\u76EE\u5F55 ${o.default.yellow(i)} \u5DF2\u5B58\u5728\u4E14\u4E0D\u4E3A\u7A7A\uFF0C\u662F\u5426\u8986\u76D6\uFF1F`,initial:!1});f||(console.log(o.default.yellow("\u64CD\u4F5C\u5DF2\u53D6\u6D88")),process.exit(0))}let m=await L();m.length===0&&(console.error(o.default.red("\u9519\u8BEF: \u6CA1\u6709\u627E\u5230\u53EF\u7528\u7684\u6A21\u677F")),console.log(o.default.yellow("\u63D0\u793A: \u8BF7\u5728 templates \u76EE\u5F55\u4E2D\u521B\u5EFA\u6A21\u677F")),process.exit(1));let a=r.template||"";if(!a){let l=m.map(u=>{let O=M[u]||u;return{title:`${o.default.cyan(u)} - ${O}`,value:u}}),{selectedTemplate:f}=await(0,v.default)({type:"select",name:"selectedTemplate",message:"\u8BF7\u9009\u62E9\u6A21\u677F",choices:l});f||(console.log(o.default.yellow("\u64CD\u4F5C\u5DF2\u53D6\u6D88")),process.exit(0)),a=f}(!a||!await V(a))&&(console.error(o.default.red(`\u9519\u8BEF: \u6A21\u677F ${a||"(\u672A\u6307\u5B9A)"} \u4E0D\u5B58\u5728`)),console.log(o.default.yellow(`\u53EF\u7528\u6A21\u677F: ${m.join(", ")}`)),process.exit(1));let{description:T,author:H}=await(0,v.default)([{type:"text",name:"description",message:"\u9879\u76EE\u63CF\u8FF0",initial:`A ${a} project`},{type:"text",name:"author",message:"\u4F5C\u8005",initial:""}]),C=(0,N.default)("\u6B63\u5728\u521B\u5EFA\u9879\u76EE...").start();try{await S(i);let l=g(),f=E.default.resolve(l,a);await D(f,i,{projectName:s,description:T||"",author:H||"",version:"1.0.0"}),C.succeed(o.default.green("\u9879\u76EE\u521B\u5EFA\u6210\u529F\uFF01"))}catch(l){C.fail(o.default.red("\u9879\u76EE\u521B\u5EFA\u5931\u8D25")),console.error(l),process.exit(1)}console.log(`
-`+o.default.green("\u4E0B\u4E00\u6B65:")),console.log(o.default.blue(`  cd ${s}`)),console.log(o.default.blue("  pnpm install")),console.log(o.default.blue("  pnpm dev"))}catch(i){i.message==="User force closed the prompt"&&(console.log(o.default.yellow(`
-\u64CD\u4F5C\u5DF2\u53D6\u6D88`)),process.exit(0)),console.error(o.default.red("\u53D1\u751F\u9519\u8BEF:"),i.message),process.exit(1)}});var P=require("commander"),F=e=>{let t=e(P.program);return P.program.addCommand(t),t};F(A);F(I);var ee=()=>{z.program.parse(process.argv)};0&&(module.exports={runCLI});
+"use strict";
+var __create = Object.create;
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getProtoOf = Object.getPrototypeOf;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+  // If the importer is in node compatibility mode or this is not an ESM
+  // file that has been converted to a CommonJS file using a Babel-
+  // compatible transform (i.e. "__esModule" has not been set), then set
+  // "default" to the CommonJS "module.exports" for node compatibility.
+  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
+  mod
+));
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+
+// src/index.ts
+var index_exports = {};
+__export(index_exports, {
+  runCLI: () => runCLI
+});
+module.exports = __toCommonJS(index_exports);
+
+// src/cli.ts
+var import_commander2 = require("commander");
+
+// src/commands/base/info.ts
+var import_picocolors = __toESM(require("picocolors"));
+
+// package.json
+var package_default = {
+  name: "future-coder-cli",
+  version: "1.0.0",
+  description: "zx\u811A\u624B\u67B6",
+  keywords: ["future-coder-cli"],
+  main: "dist/index.js",
+  types: "dist/index.d.ts",
+  files: [
+    "dist",
+    "lib",
+    "template"
+  ],
+  bin: {
+    "future-coder-cli": "bin/future.js"
+  },
+  scripts: {
+    dev: "tsup src/index.ts --watch",
+    build: "tsup",
+    release: "pnpm build && pnpm publish",
+    "release:patch": "pnpm version patch && pnpm release",
+    "release:minor": "pnpm version minor && pnpm release",
+    "release:major": "pnpm version major && pnpm release"
+  },
+  author: "zx",
+  license: "ISC",
+  dependencies: {
+    "@types/fs-extra": "^11.0.4",
+    "@types/prompts": "^2.4.9",
+    commander: "^14.0.2",
+    consola: "^3.4.2",
+    "fs-extra": "^11.3.0",
+    giget: "^2.0.0",
+    ora: "^5.4.1",
+    picocolors: "^1.1.1",
+    prompts: "^2.4.2",
+    tsup: "^8.5.0"
+  }
+};
+
+// src/commands/base/info.ts
+var info = (program3) => {
+  return program3.command("info").description("\u663E\u793A\u9879\u76EE\u4FE1\u606F").action(() => {
+    console.log(import_picocolors.default.green("\u9879\u76EE\u4FE1\u606F"));
+    console.log(import_picocolors.default.blue("\u7248\u672C\u53F7: " + package_default.version));
+    console.log(import_picocolors.default.blue("\u4F5C\u8005: " + package_default.author));
+  });
+};
+
+// src/commands/base/create.ts
+var import_path4 = __toESM(require("path"));
+var import_picocolors2 = __toESM(require("picocolors"));
+var import_prompts = __toESM(require("prompts"));
+var import_ora = __toESM(require("ora"));
+
+// src/utils/path.ts
+var import_path = __toESM(require("path"));
+function getTemplatesDir() {
+  try {
+    if (typeof __dirname !== "undefined") {
+      return import_path.default.resolve(__dirname, "../../templates");
+    }
+  } catch {
+  }
+  const cwd = process.cwd();
+  const possibleTemplatesDir = import_path.default.resolve(cwd, "templates");
+  return possibleTemplatesDir;
+}
+function getProjectRoot() {
+  return process.cwd();
+}
+function resolveTargetPath(targetPath) {
+  if (import_path.default.isAbsolute(targetPath)) {
+    return targetPath;
+  }
+  return import_path.default.resolve(getProjectRoot(), targetPath);
+}
+async function pathExists(filePath) {
+  try {
+    const fs3 = await import("fs-extra");
+    return await fs3.pathExists(filePath);
+  } catch {
+    return false;
+  }
+}
+
+// src/utils/fs.ts
+var import_fs_extra = __toESM(require("fs-extra"));
+async function isEmptyDir(dirPath) {
+  if (!await import_fs_extra.default.pathExists(dirPath)) {
+    return true;
+  }
+  const files = await import_fs_extra.default.readdir(dirPath);
+  return files.length === 0;
+}
+async function ensureDir(dirPath) {
+  await import_fs_extra.default.ensureDir(dirPath);
+}
+
+// src/utils/template.ts
+var import_fs_extra2 = __toESM(require("fs-extra"));
+var import_path2 = __toESM(require("path"));
+function getTemplatePath(templateName) {
+  return import_path2.default.resolve(getTemplatesDir(), templateName);
+}
+async function templateExists(templateName) {
+  const templatePath = getTemplatePath(templateName);
+  return await import_fs_extra2.default.pathExists(templatePath);
+}
+async function getAvailableTemplates() {
+  const templatesDir = getTemplatesDir();
+  if (!await import_fs_extra2.default.pathExists(templatesDir)) {
+    return [];
+  }
+  const entries = await import_fs_extra2.default.readdir(templatesDir, { withFileTypes: true });
+  return entries.filter((entry) => entry.isDirectory()).map((entry) => entry.name);
+}
+function replaceTemplateVars(content, vars) {
+  let result = content;
+  for (const [key, value] of Object.entries(vars)) {
+    const regex = new RegExp(`\\{\\{\\s*${key}\\s*\\}\\}`, "g");
+    result = result.replace(regex, value);
+  }
+  return result;
+}
+async function processTemplateFile(filePath, vars) {
+  const content = await import_fs_extra2.default.readFile(filePath, "utf-8");
+  return replaceTemplateVars(content, vars);
+}
+async function processTemplateDir(srcDir, destDir, vars) {
+  await import_fs_extra2.default.ensureDir(destDir);
+  const entries = await import_fs_extra2.default.readdir(srcDir, { withFileTypes: true });
+  const keepHiddenFiles = [".gitignore", ".eslintrc", ".prettierrc", ".editorconfig", ".npmrc"];
+  for (const entry of entries) {
+    const srcPath = import_path2.default.join(srcDir, entry.name);
+    let destPath = import_path2.default.join(destDir, replaceTemplateVars(entry.name, vars));
+    if (entry.name.startsWith(".")) {
+      if (entry.isDirectory()) {
+        continue;
+      }
+      if (entry.isFile() && !keepHiddenFiles.includes(entry.name)) {
+        continue;
+      }
+    }
+    if (entry.isDirectory()) {
+      await processTemplateDir(srcPath, destPath, vars);
+    } else if (entry.isFile()) {
+      const content = await processTemplateFile(srcPath, vars);
+      await import_fs_extra2.default.writeFile(destPath, content, "utf-8");
+    }
+  }
+}
+
+// src/constants/index.ts
+var TEMPLATES = {
+  "react-vite": "React + Vite \u9879\u76EE\u6A21\u677F",
+  "vue-vite": "Vue + Vite \u9879\u76EE\u6A21\u677F",
+  "node-ts": "Node.js + TypeScript \u9879\u76EE\u6A21\u677F"
+};
+
+// src/commands/base/create.ts
+var create = (program3) => {
+  return program3.command("create <project-name>").description("\u521B\u5EFA\u4E00\u4E2A\u65B0\u9879\u76EE").option("-t, --template <template>", "\u6307\u5B9A\u6A21\u677F\u540D\u79F0").option("-f, --force", "\u5F3A\u5236\u8986\u76D6\u5DF2\u5B58\u5728\u7684\u76EE\u5F55").action(async (projectName, options) => {
+    try {
+      if (!projectName) {
+        console.error(import_picocolors2.default.red("\u9519\u8BEF: \u8BF7\u63D0\u4F9B\u9879\u76EE\u540D\u79F0"));
+        process.exit(1);
+      }
+      const targetPath = resolveTargetPath(projectName);
+      const targetDirName = import_path4.default.basename(targetPath);
+      const exists = await pathExists(targetPath);
+      if (exists && !options.force) {
+        const isEmpty = await isEmptyDir(targetPath);
+        if (!isEmpty) {
+          const { overwrite } = await (0, import_prompts.default)({
+            type: "confirm",
+            name: "overwrite",
+            message: `\u76EE\u5F55 ${import_picocolors2.default.yellow(targetPath)} \u5DF2\u5B58\u5728\u4E14\u4E0D\u4E3A\u7A7A\uFF0C\u662F\u5426\u8986\u76D6\uFF1F`,
+            initial: false
+          });
+          if (!overwrite) {
+            console.log(import_picocolors2.default.yellow("\u64CD\u4F5C\u5DF2\u53D6\u6D88"));
+            process.exit(0);
+          }
+        }
+      }
+      const availableTemplates = await getAvailableTemplates();
+      if (availableTemplates.length === 0) {
+        console.error(import_picocolors2.default.red("\u9519\u8BEF: \u6CA1\u6709\u627E\u5230\u53EF\u7528\u7684\u6A21\u677F"));
+        console.log(import_picocolors2.default.yellow("\u63D0\u793A: \u8BF7\u5728 templates \u76EE\u5F55\u4E2D\u521B\u5EFA\u6A21\u677F"));
+        process.exit(1);
+      }
+      let templateName = options.template || "";
+      if (!templateName) {
+        const templateChoices = availableTemplates.map((name) => {
+          const description2 = TEMPLATES[name] || name;
+          return {
+            title: `${import_picocolors2.default.cyan(name)} - ${description2}`,
+            value: name
+          };
+        });
+        const { selectedTemplate } = await (0, import_prompts.default)({
+          type: "select",
+          name: "selectedTemplate",
+          message: "\u8BF7\u9009\u62E9\u6A21\u677F",
+          choices: templateChoices
+        });
+        if (!selectedTemplate) {
+          console.log(import_picocolors2.default.yellow("\u64CD\u4F5C\u5DF2\u53D6\u6D88"));
+          process.exit(0);
+        }
+        templateName = selectedTemplate;
+      }
+      if (!templateName || !await templateExists(templateName)) {
+        console.error(import_picocolors2.default.red(`\u9519\u8BEF: \u6A21\u677F ${templateName || "(\u672A\u6307\u5B9A)"} \u4E0D\u5B58\u5728`));
+        console.log(import_picocolors2.default.yellow(`\u53EF\u7528\u6A21\u677F: ${availableTemplates.join(", ")}`));
+        process.exit(1);
+      }
+      const { description, author } = await (0, import_prompts.default)([
+        {
+          type: "text",
+          name: "description",
+          message: "\u9879\u76EE\u63CF\u8FF0",
+          initial: `A ${templateName} project`
+        },
+        {
+          type: "text",
+          name: "author",
+          message: "\u4F5C\u8005",
+          initial: ""
+        }
+      ]);
+      const spinner = (0, import_ora.default)("\u6B63\u5728\u521B\u5EFA\u9879\u76EE...").start();
+      try {
+        await ensureDir(targetPath);
+        const templatesDir = getTemplatesDir();
+        const templatePath = import_path4.default.resolve(templatesDir, templateName);
+        const templateVars = {
+          projectName: targetDirName,
+          description: description || "",
+          author: author || "",
+          version: "1.0.0"
+        };
+        await processTemplateDir(templatePath, targetPath, templateVars);
+        spinner.succeed(import_picocolors2.default.green("\u9879\u76EE\u521B\u5EFA\u6210\u529F\uFF01"));
+      } catch (error) {
+        spinner.fail(import_picocolors2.default.red("\u9879\u76EE\u521B\u5EFA\u5931\u8D25"));
+        console.error(error);
+        process.exit(1);
+      }
+      console.log("\n" + import_picocolors2.default.green("\u4E0B\u4E00\u6B65:"));
+      console.log(import_picocolors2.default.blue(`  cd ${targetDirName}`));
+      console.log(import_picocolors2.default.blue("  pnpm install"));
+      console.log(import_picocolors2.default.blue("  pnpm dev"));
+    } catch (error) {
+      if (error.message === "User force closed the prompt") {
+        console.log(import_picocolors2.default.yellow("\n\u64CD\u4F5C\u5DF2\u53D6\u6D88"));
+        process.exit(0);
+      }
+      console.error(import_picocolors2.default.red("\u53D1\u751F\u9519\u8BEF:"), error.message);
+      process.exit(1);
+    }
+  });
+};
+
+// src/commands/registerCommand.ts
+var import_commander = require("commander");
+var registerCommand = (fn) => {
+  const command = fn(import_commander.program);
+  return command;
+};
+
+// src/commands/index.ts
+registerCommand(info);
+registerCommand(create);
+
+// src/cli.ts
+var import_picocolors3 = __toESM(require("picocolors"));
+var runCLI = () => {
+  console.log(import_picocolors3.default.green("\u542F\u52A8 future-coder-cli"));
+  import_commander2.program.parse(process.argv);
+};
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
+  runCLI
+});
