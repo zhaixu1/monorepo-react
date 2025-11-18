@@ -24,6 +24,7 @@ export const create = (program: Command) => {
 
         // 2. 解析目标路径
         const targetPath = resolveTargetPath(projectName)
+        console.log(pc.bgYellow('targetPath: ') + targetPath)
         const targetDirName = path.basename(targetPath)
 
         // 3. 检查目录是否已存在

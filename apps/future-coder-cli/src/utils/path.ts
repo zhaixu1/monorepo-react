@@ -1,5 +1,5 @@
 import path from 'path'
-
+import pc from 'picocolors'
 /**
  * 获取模板目录的绝对路径
  * 在构建后，dist 目录结构：dist/utils/path.js
@@ -15,7 +15,8 @@ export function getTemplatesDir(): string {
     if (typeof __dirname !== 'undefined') {
       // 从 dist/utils/path.js -> dist -> 项目根目录 -> templates
       // @ts-ignore
-      return path.resolve(__dirname, '../../templates')
+      console.log(pc.bgYellow('__dirname: ') + __dirname)
+      return path.resolve(__dirname, '../templates')
     }
   } catch {
     // 忽略

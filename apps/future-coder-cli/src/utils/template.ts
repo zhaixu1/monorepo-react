@@ -1,6 +1,7 @@
 import fs from 'fs-extra'
 import path from 'path'
 import { getTemplatesDir } from './path'
+import pc from 'picocolors'
 
 /**
  * 获取模板路径
@@ -22,6 +23,7 @@ export async function templateExists(templateName: string): Promise<boolean> {
  */
 export async function getAvailableTemplates(): Promise<string[]> {
   const templatesDir = getTemplatesDir()
+  console.log(pc.bgYellow('获取到的路径是: ') + templatesDir)
   if (!(await fs.pathExists(templatesDir))) {
     return []
   }

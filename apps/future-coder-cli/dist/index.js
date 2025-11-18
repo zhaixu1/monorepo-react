@@ -82,7 +82,7 @@ var package_default = {
 
 // src/commands/base/info.ts
 var info = (program3) => {
-  return program3.command("info").description("\u663E\u793A\u9879\u76EE\u4FE1\u606F").action(() => {
+  return program3.command("info").argument("info").description("\u663E\u793A\u9879\u76EE\u4FE1\u606F").action(() => {
     console.log(import_picocolors.default.green("\u9879\u76EE\u4FE1\u606F"));
     console.log(import_picocolors.default.blue("\u7248\u672C\u53F7: " + package_default.version));
     console.log(import_picocolors.default.blue("\u4F5C\u8005: " + package_default.author));
@@ -91,16 +91,18 @@ var info = (program3) => {
 
 // src/commands/base/create.ts
 var import_path4 = __toESM(require("path"));
-var import_picocolors2 = __toESM(require("picocolors"));
+var import_picocolors4 = __toESM(require("picocolors"));
 var import_prompts = __toESM(require("prompts"));
 var import_ora = __toESM(require("ora"));
 
 // src/utils/path.ts
 var import_path = __toESM(require("path"));
+var import_picocolors2 = __toESM(require("picocolors"));
 function getTemplatesDir() {
   try {
     if (typeof __dirname !== "undefined") {
-      return import_path.default.resolve(__dirname, "../../templates");
+      console.log(import_picocolors2.default.bgYellow("__dirname: ") + __dirname);
+      return import_path.default.resolve(__dirname, "../templates");
     }
   } catch {
   }
@@ -142,6 +144,7 @@ async function ensureDir(dirPath) {
 // src/utils/template.ts
 var import_fs_extra2 = __toESM(require("fs-extra"));
 var import_path2 = __toESM(require("path"));
+var import_picocolors3 = __toESM(require("picocolors"));
 function getTemplatePath(templateName) {
   return import_path2.default.resolve(getTemplatesDir(), templateName);
 }
@@ -151,6 +154,7 @@ async function templateExists(templateName) {
 }
 async function getAvailableTemplates() {
   const templatesDir = getTemplatesDir();
+  console.log(import_picocolors3.default.bgYellow("\u83B7\u53D6\u5230\u7684\u8DEF\u5F84\u662F: ") + templatesDir);
   if (!await import_fs_extra2.default.pathExists(templatesDir)) {
     return [];
   }
@@ -205,10 +209,11 @@ var create = (program3) => {
   return program3.command("create <project-name>").description("\u521B\u5EFA\u4E00\u4E2A\u65B0\u9879\u76EE").option("-t, --template <template>", "\u6307\u5B9A\u6A21\u677F\u540D\u79F0").option("-f, --force", "\u5F3A\u5236\u8986\u76D6\u5DF2\u5B58\u5728\u7684\u76EE\u5F55").action(async (projectName, options) => {
     try {
       if (!projectName) {
-        console.error(import_picocolors2.default.red("\u9519\u8BEF: \u8BF7\u63D0\u4F9B\u9879\u76EE\u540D\u79F0"));
+        console.error(import_picocolors4.default.red("\u9519\u8BEF: \u8BF7\u63D0\u4F9B\u9879\u76EE\u540D\u79F0"));
         process.exit(1);
       }
       const targetPath = resolveTargetPath(projectName);
+      console.log(import_picocolors4.default.bgYellow("targetPath: ") + targetPath);
       const targetDirName = import_path4.default.basename(targetPath);
       const exists = await pathExists(targetPath);
       if (exists && !options.force) {
@@ -217,19 +222,19 @@ var create = (program3) => {
           const { overwrite } = await (0, import_prompts.default)({
             type: "confirm",
             name: "overwrite",
-            message: `\u76EE\u5F55 ${import_picocolors2.default.yellow(targetPath)} \u5DF2\u5B58\u5728\u4E14\u4E0D\u4E3A\u7A7A\uFF0C\u662F\u5426\u8986\u76D6\uFF1F`,
+            message: `\u76EE\u5F55 ${import_picocolors4.default.yellow(targetPath)} \u5DF2\u5B58\u5728\u4E14\u4E0D\u4E3A\u7A7A\uFF0C\u662F\u5426\u8986\u76D6\uFF1F`,
             initial: false
           });
           if (!overwrite) {
-            console.log(import_picocolors2.default.yellow("\u64CD\u4F5C\u5DF2\u53D6\u6D88"));
+            console.log(import_picocolors4.default.yellow("\u64CD\u4F5C\u5DF2\u53D6\u6D88"));
             process.exit(0);
           }
         }
       }
       const availableTemplates = await getAvailableTemplates();
       if (availableTemplates.length === 0) {
-        console.error(import_picocolors2.default.red("\u9519\u8BEF: \u6CA1\u6709\u627E\u5230\u53EF\u7528\u7684\u6A21\u677F"));
-        console.log(import_picocolors2.default.yellow("\u63D0\u793A: \u8BF7\u5728 templates \u76EE\u5F55\u4E2D\u521B\u5EFA\u6A21\u677F"));
+        console.error(import_picocolors4.default.red("\u9519\u8BEF: \u6CA1\u6709\u627E\u5230\u53EF\u7528\u7684\u6A21\u677F"));
+        console.log(import_picocolors4.default.yellow("\u63D0\u793A: \u8BF7\u5728 templates \u76EE\u5F55\u4E2D\u521B\u5EFA\u6A21\u677F"));
         process.exit(1);
       }
       let templateName = options.template || "";
@@ -237,7 +242,7 @@ var create = (program3) => {
         const templateChoices = availableTemplates.map((name) => {
           const description2 = TEMPLATES[name] || name;
           return {
-            title: `${import_picocolors2.default.cyan(name)} - ${description2}`,
+            title: `${import_picocolors4.default.cyan(name)} - ${description2}`,
             value: name
           };
         });
@@ -248,14 +253,14 @@ var create = (program3) => {
           choices: templateChoices
         });
         if (!selectedTemplate) {
-          console.log(import_picocolors2.default.yellow("\u64CD\u4F5C\u5DF2\u53D6\u6D88"));
+          console.log(import_picocolors4.default.yellow("\u64CD\u4F5C\u5DF2\u53D6\u6D88"));
           process.exit(0);
         }
         templateName = selectedTemplate;
       }
       if (!templateName || !await templateExists(templateName)) {
-        console.error(import_picocolors2.default.red(`\u9519\u8BEF: \u6A21\u677F ${templateName || "(\u672A\u6307\u5B9A)"} \u4E0D\u5B58\u5728`));
-        console.log(import_picocolors2.default.yellow(`\u53EF\u7528\u6A21\u677F: ${availableTemplates.join(", ")}`));
+        console.error(import_picocolors4.default.red(`\u9519\u8BEF: \u6A21\u677F ${templateName || "(\u672A\u6307\u5B9A)"} \u4E0D\u5B58\u5728`));
+        console.log(import_picocolors4.default.yellow(`\u53EF\u7528\u6A21\u677F: ${availableTemplates.join(", ")}`));
         process.exit(1);
       }
       const { description, author } = await (0, import_prompts.default)([
@@ -284,22 +289,22 @@ var create = (program3) => {
           version: "1.0.0"
         };
         await processTemplateDir(templatePath, targetPath, templateVars);
-        spinner.succeed(import_picocolors2.default.green("\u9879\u76EE\u521B\u5EFA\u6210\u529F\uFF01"));
+        spinner.succeed(import_picocolors4.default.green("\u9879\u76EE\u521B\u5EFA\u6210\u529F\uFF01"));
       } catch (error) {
-        spinner.fail(import_picocolors2.default.red("\u9879\u76EE\u521B\u5EFA\u5931\u8D25"));
+        spinner.fail(import_picocolors4.default.red("\u9879\u76EE\u521B\u5EFA\u5931\u8D25"));
         console.error(error);
         process.exit(1);
       }
-      console.log("\n" + import_picocolors2.default.green("\u4E0B\u4E00\u6B65:"));
-      console.log(import_picocolors2.default.blue(`  cd ${targetDirName}`));
-      console.log(import_picocolors2.default.blue("  pnpm install"));
-      console.log(import_picocolors2.default.blue("  pnpm dev"));
+      console.log("\n" + import_picocolors4.default.green("\u4E0B\u4E00\u6B65:"));
+      console.log(import_picocolors4.default.blue(`  cd ${targetDirName}`));
+      console.log(import_picocolors4.default.blue("  pnpm install"));
+      console.log(import_picocolors4.default.blue("  pnpm dev"));
     } catch (error) {
       if (error.message === "User force closed the prompt") {
-        console.log(import_picocolors2.default.yellow("\n\u64CD\u4F5C\u5DF2\u53D6\u6D88"));
+        console.log(import_picocolors4.default.yellow("\n\u64CD\u4F5C\u5DF2\u53D6\u6D88"));
         process.exit(0);
       }
-      console.error(import_picocolors2.default.red("\u53D1\u751F\u9519\u8BEF:"), error.message);
+      console.error(import_picocolors4.default.red("\u53D1\u751F\u9519\u8BEF:"), error.message);
       process.exit(1);
     }
   });
@@ -317,9 +322,9 @@ registerCommand(info);
 registerCommand(create);
 
 // src/cli.ts
-var import_picocolors3 = __toESM(require("picocolors"));
+var import_picocolors5 = __toESM(require("picocolors"));
 var runCLI = () => {
-  console.log(import_picocolors3.default.green("\u542F\u52A8 future-coder-cli"));
+  console.log(import_picocolors5.default.green("\u542F\u52A8 future-coder-cli" + process.argv));
   import_commander2.program.parse(process.argv);
 };
 // Annotate the CommonJS export names for ESM import in node:
