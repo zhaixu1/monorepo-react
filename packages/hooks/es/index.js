@@ -1,1 +1,1 @@
-export{default as useToggle}from"./useToggle/index.js";export{default as useStorage}from"./useStorage/index.js";export{default as useFocus}from"./useFocus/index.js";export{default as useWindowSize}from"./useWindowSize/index.js";
+export{default as useToggle}from"./useToggle/index.js";export{default as useStorage}from"./useStorage/index.js";export{default as useFocus}from"./useFocus/index.js";export{default as useWindowSize}from"./useWindowSize/index.js";export{default as useDebounce}from"./useDebounce/index.js";

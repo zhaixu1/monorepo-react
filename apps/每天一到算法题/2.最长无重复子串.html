@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>最长无重复子串</title>
+    </head>
+    <body>
+        <script>
+            /**
+             * 最长无重复子串
+             * 输入: "abcabcbb"
+             * 输出: 3
+             * 解释: 因为无重复字符的最长子串是 "abc"，所以其长度为 3。
+             *
+             * 输入: "bbbbb"
+             * 输出: 1
+             * 解释: 因为无重复字符的最长子串是 "b"，所以其长度为 1。
+             *
+             */
+            function longestSubstring(s) {
+                const map = new Map();
+                let maxLength = 0;
+                let start = 0; // 窗口左边界
+
+                for (let i = 0; i < s.length; i++) {
+                    debugger
+                    const char = s[i];
+                    // 如果当前字符在 map 中出现过，且它的索引在当前窗口内（>= start）
+                    // 我们需要把窗口左边界移动到重复字符的下一位
+                    if (map.has(char)) {
+                        start = Math.max(start, map.get(char) + 1); // 这里其实主要是要跳过重复的B
+                    }
+
+                    // 1. 存入/更新当前字符的索引
+                    map.set(char, i);
+
+                    // 2. 计算当前窗口长度并更新最大值
+                    // 当前窗口长度 = 当前索引 i - 左边界 start + 1
+                    maxLength = Math.max(maxLength, i - start + 1);
+                }
+                return maxLength;
+            }
+
+            console.log(longestSubstring("abcabcbb"), "longestSubstring");
+            console.log(longestSubstring("bbbbb"), "longestSubstring");
+            console.log(longestSubstring("pwwkew"), "longestSubstring");
+            console.log(longestSubstring(""), "longestSubstring");
+            console.log(longestSubstring(" "), "longestSubstring");
+            console.log(longestSubstring("au"), "longestSubstring");
+        </script>
+    </body>
+</html>

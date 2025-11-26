@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>IntersectionObserver 基础示例</title>
+  <style>
+    .box {
+      width: 200px;
+      height: 200px;
+      background: skyblue;
+      margin: 1000px 0; /* 让元素初始在视口外 */
+    }
+  </style>
+</head>
+<body>
+  <h3>第一个元素 (被监听)</h3>
+  <div class="box" id="target"></div>
+
+  <h3>第二个元素 (未被监听)</h3>
+  <div class="box" id="target2" style="background: lightgreen;"></div>
+
+  <script>
+    // 1. 获取目标元素
+    const target = document.getElementById('target');
+    const target2 = document.getElementById('target2');
+
+    // 2. 创建观察者实例
+    const observer = new IntersectionObserver((entries) => {
+      // 遍历entries（可能同时监测多个元素）
+      console.log(entries, 'entries');
+      
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          console.log('元素进入视口:', entry.target.id);
+          entry.target.style.background = 'pink'; // 改变样式
+        //   observer.unobserve(entry.target); // 停止监测该元素（可选）
+        } else {
+          console.log('元素离开视口:', entry.target.id);
+        }
+      });
+    });
+
+    // 3. 开始监测目标元素
+    observer.observe(target);
+    
+    // 关键点：IntersectionObserver 只会监听你显式调用 observe() 的元素。
+    // 因为我们没有调用 observer.observe(target2)，所以第二个元素不会被监听。
+  </script>
+</body>
+</html>
