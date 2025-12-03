@@ -1,0 +1,25 @@
+{
+    "compilerOptions": {
+        "target": "ES2020",
+        "useDefineForClassFields": true,
+        "lib": ["ES2020", "DOM","DOM.Iterable", "ES6", "ES2017"],
+        "module": "ESNext",
+        "skipLibCheck": true,
+        
+        "moduleResolution": "bundler",
+        "allowImportsNotUsedAsValues": true,
+        "noEmit": true,
+        "jsx": "react-jsx",
+        "strict": true,
+        "forceConsistentCasingInFileNames": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "noImplicitAny": true,
+        "noImplicitOverride": true,
+        "noFallthroughCasesInSwitch": true,
+        "removeComments": true,
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+    },
+    "include": ["src/**/*"]
+}
