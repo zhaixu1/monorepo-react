@@ -42,6 +42,7 @@ function testPatchFlagsOptimization() {
   console.log('PatchFlag:', newVNode.patchFlag === PatchFlags.TEXT ? 'TEXT' : 'OTHER');
   console.log('优化: 只更新文本内容，跳过其他属性检查');
   console.log('');
+  debugger
 }
 
 // 测试2: 静态提升优化

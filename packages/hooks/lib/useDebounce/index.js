@@ -1,0 +1,1 @@
+"use strict";Object.defineProperty(exports,"__esModule",{value:!0});var e=require("react");exports.default=function(t,r){var u=e.useState(t),n=u[0],o=u[1];return e.useEffect(function(){var e=setTimeout(function(){o(t)},r);return function(){clearTimeout(e)}},[t,r]),n};

@@ -1,0 +1,1 @@
+import{useState as t,useEffect as r}from"react";function n(n,e){var o=t(n),u=o[0],i=o[1];return r(function(){var t=setTimeout(function(){i(n)},e);return function(){clearTimeout(t)}},[n,e]),u}export{n as default};

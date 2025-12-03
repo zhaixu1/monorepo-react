@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>最长无重复子串演示</title>
+    <style>
+        body { font-family: 'Courier New', monospace; padding: 20px; }
+        .step { margin-bottom: 15px; padding: 10px; border: 1px solid #ddd; border-radius: 5px; }
+        .window { font-weight: bold; color: #e91e63; font-size: 1.2em; }
+        .highlight { background-color: #fff9c4; }
+    </style>
+</head>
+<body>
+    <h2>算法执行过程可视化：</h2>
+    <div id="log"></div>
+
+    <script>
+        function logStep(step, s, start, i, map, maxLength, action) {
+            const logDiv = document.getElementById('log');
+            
+            // 构建可视化字符串
+            // 例如:  a b [c a] b c
+            let visualStr = '';
+            for(let k = 0; k < s.length; k++) {
+                if (k === start) visualStr += '【'; // 窗口起点
+                visualStr += s[k];
+                if (k === i) visualStr += '】';     // 窗口终点
+                else visualStr += ' ';
+            }
+
+            const mapContent = JSON.stringify(Object.fromEntries(map));
+            
+            const html = `
+                <div class="step ${action.includes('重复') ? 'highlight' : ''}">
+                    <div><strong>步骤 ${step}:</strong> 处理字符 '${s[i]}' (索引 ${i})</div>
+                    <div class="window">${visualStr}</div>
+                    <div>当前窗口: "${s.substring(start, i + 1)}"</div>
+                    <div>Map状态: ${mapContent}</div>
+                    <div>操作: ${action}</div>
+                    <div>当前Start: ${start}, MaxLength: ${maxLength}</div>
+                </div>
+            `;
+            logDiv.innerHTML += html;
+        }
+
+        function longestSubstring(s) {
+            const map = new Map();
+            let maxLength = 0;
+            let start = 0; 
+            
+            // 清空之前的日志
+            document.getElementById('log').innerHTML = '';
+
+            for (let i = 0; i < s.length; i++) {
+                const char = s[i];
+                let action = "向右扩展";
+
+                if (map.has(char)) {
+                    const oldIndex = map.get(char);
+                    // 只有当重复字符在当前窗口内时才移动start
+                    if (oldIndex >= start) {
+                        start = oldIndex + 1;
+                        action = `发现重复字符 '${char}' (原索引${oldIndex}) -> 窗口左侧缩进到 ${start}`;
+                    }
+                }
+
+                map.set(char, i);
+                
+                const currentLen = i - start + 1;
+                if (currentLen > maxLength) {
+                    maxLength = currentLen;
+                    action += ` -> 更新最大长度为 ${maxLength}`;
+                }
+
+                // 打印当前状态
+                logStep(i + 1, s, start, i, map, maxLength, action);
+            }
+            return maxLength;
+        }
+
+        // 测试用例
+        const input = "abcabcbb";
+        console.log(`输入: "${input}"`);
+        const result = longestSubstring(input);
+        console.log(`结果: ${result}`);
+    </script>
+</body>
+</html>
