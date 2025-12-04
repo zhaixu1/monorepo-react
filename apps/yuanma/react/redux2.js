@@ -23,4 +23,11 @@ function createStore(reducer, initialState) {
 
         return action;
     }
+
+    dispatch({type: '@////'})
+    return {
+        getState,
+        subscribe,
+        dispatch
+    }
 }
