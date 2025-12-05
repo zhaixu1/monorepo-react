@@ -1,7 +1,7 @@
 function createStore(reducer, initialState) {
     let state = initialState;
 
-    const listeners = [];
+    const listeners = []; // 监听器 也就是订阅者
 
     const getState = () => state;
 
