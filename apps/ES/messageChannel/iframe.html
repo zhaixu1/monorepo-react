@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iframe Page</title>
+    <style>
+        body {
+            background-color: #f0f0f0;
+            padding: 20px;
+            border: 1px solid #ccc;
+        }
+        #messages {
+            margin-top: 10px;
+            padding: 10px;
+            background: white;
+            border: 1px solid #ddd;
+            min-height: 100px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Iframe Page (子页面)</h2>
+    <p>等待主页面发送端口...</p>
+    <button id="btn" disabled>发送消息给主页面</button>
+    <div id="messages"></div>
+
+    <script>
+        const messagesDiv = document.getElementById('messages');
+        const btn = document.getElementById('btn');
+        let port;
+
+        // 监听来自主页面的消息（用于接收端口）
+        window.addEventListener('message', (event) => {
+            // 简单的安全性检查，实际项目中应检查 event.origin
+            console.log('Iframe received message event:', event);
+
+            // 检查是否有端口发送过来
+            if (event.ports && event.ports.length > 0) {
+                port = event.ports[0];
+                
+                log('收到端口! 通信通道已建立。');
+                btn.disabled = false;
+
+                // 监听端口消息
+                port.onmessage = (e) => {
+                    log('收到主页面消息: ' + e.data);
+                };
+
+                // 发送初始问候
+                port.postMessage('你好，主页面！我是 iframe，我已经收到端口了。');
+            }
+        });
+
+        btn.addEventListener('click', () => {
+            if (port) {
+                const msg = '来自 iframe 的时间: ' + new Date().toLocaleTimeString();
+                port.postMessage(msg);
+                log('已发送: ' + msg);
+            }
+        });
+
+        function log(text) {
+            const p = document.createElement('div');
+            p.textContent = text;
+            messagesDiv.appendChild(p);
+        }
+    </script>
+</body>
+</html>

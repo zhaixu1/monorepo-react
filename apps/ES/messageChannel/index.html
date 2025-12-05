@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main Page</title>
+    <style>
+        body {
+            padding: 20px;
+            font-family: sans-serif;
+        }
+        .container {
+            display: flex;
+            gap: 20px;
+        }
+        .box {
+            flex: 1;
+            padding: 20px;
+            border: 2px solid #333;
+        }
+        iframe {
+            width: 100%;
+            height: 400px;
+            border: none;
+        }
+        #messages {
+            margin-top: 10px;
+            padding: 10px;
+            background: #eef;
+            border: 1px solid #ccd;
+            min-height: 100px;
+        }
+    </style>
+</head>
+<body>
+    <h1>MessageChannel 演示 (主页面)</h1>
+    
+    <div class="container">
+        <div class="box">
+            <h2>主页面控制区</h2>
+            <button id="sendBtn">通过 Channel 发送消息给 iframe</button>
+            <div id="messages">
+                <strong>消息日志:</strong>
+            </div>
+        </div>
+        <div class="box">
+            <iframe src="iframe.html" id="myIframe"></iframe>
+        </div>
+    </div>
+
+    <script>
+        const iframe = document.getElementById('myIframe');
+        const messagesDiv = document.getElementById('messages');
+        const sendBtn = document.getElementById('sendBtn');
+        
+        // 1. 创建 MessageChannel
+        const channel = new MessageChannel();
+        const port1 = channel.port1; // 主页面保留
+        const port2 = channel.port2; // 发送给 iframe
+
+        // 2. 监听 port1 的消息
+        port1.onmessage = (event) => {
+            log('收到 iframe 消息: ' + event.data);
+        };
+
+        // 3. 等待 iframe 加载完成后，将 port2 发送过去
+        iframe.onload = () => {
+            log('Iframe 加载完毕，正在发送 port2...');
+            // postMessage 的第二个参数是 targetOrigin，这里用 '*' 方便演示，生产环境建议指定具体域
+            // 第三个参数是 transferList，这里把 port2 的所有权转交给 iframe
+            iframe.contentWindow.postMessage('init', '*', [port2]);
+        };
+
+        // 4. 发送消息按钮
+        sendBtn.addEventListener('click', () => {
+            const msg = '来自主页面的问候 ' + new Date().toLocaleTimeString();
+            port1.postMessage(msg);
+            log('已发送: ' + msg);
+        });
+
+        function log(text) {
+            const p = document.createElement('div');
+            p.textContent = text;
+            messagesDiv.appendChild(p);
+        }
+    </script>
+</body>
+</html>

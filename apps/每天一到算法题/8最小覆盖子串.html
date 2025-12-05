@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>最小覆盖子串</title>
+</head>
+<body>
+    <script>
+        /**
+         * @param {string} s 源字符串
+         * @param {string} t 目标字符串
+         * @return {string}
+         */
+        var minWindow = function(s, t) {
+            // 1. 统计 t 中每个字符出现的次数
+            const need = new Map();
+            for (let char of t) {
+                need.set(char, (need.get(char) || 0) + 1);
+            }
+
+            // window: 当前窗口中包含的 t 中字符的数量
+            const window = new Map();
+            
+            let left = 0;
+            let right = 0;
+            let valid = 0; // 窗口中满足 need 条件的字符个数
+            
+            // 记录最小覆盖子串的起始索引及长度
+            let start = 0;
+            let len = Infinity;
+
+            while (right < s.length) {
+                // c 是即将移入窗口的字符
+                const c = s[right];
+                // 右移窗口
+                right++;
+
+                // 进行窗口内数据的一系列更新
+                if (need.has(c)) {
+                    window.set(c, (window.get(c) || 0) + 1);
+                    // 如果当前字符 c 在窗口中的数量和 need 中要求的数量一致，则 valid + 1
+                    if (window.get(c) === need.get(c)) {
+                        valid++;
+                    }
+                }
+
+                // 判断左侧窗口是否要收缩
+                // 当 valid 等于 need.size 时，说明当前窗口已经包含了 t 中所有字符
+                while (valid === need.size) {
+                    // 在这里更新最小覆盖子串
+                    if (right - left < len) {
+                        start = left;
+                        len = right - left;
+                    }
+
+                    // d 是即将移出窗口的字符
+                    const d = s[left];
+                    // 左移窗口
+                    left++;
+
+                    // 进行窗口内数据的一系列更新
+                    if (need.has(d)) {
+                        // 如果移出的字符 d 是我们需要的，且数量减少后不再满足要求，valid - 1
+                        if (window.get(d) === need.get(d)) {
+                            valid--;
+                        }
+                        window.set(d, window.get(d) - 1);
+                    }
+                }
+            }
+
+            // 如果 len 没被修改过，说明没找到
+            return len === Infinity ? "" : s.substr(start, len);
+        };
+
+        // --- 测试 ---
+        const s = "ADOBECODEBANC";
+        const t = "ABC";
+        console.log("最小覆盖子串:", minWindow(s, t)); // 应输出 "BANC"
+        
+        const s2 = "a";
+        const t2 = "a";
+        console.log("最小覆盖子串:", minWindow(s2, t2)); // 应输出 "a"
+        
+        const s3 = "a";
+        const t3 = "aa";
+        console.log("最小覆盖子串:", minWindow(s3, t3)); // 应输出 ""
+    </script>
+</body>
+</html>

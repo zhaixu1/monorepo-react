@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>技数排序</title>
+    </head>
+    <body>
+        <script>
+            /**
+             * 计数排序 countingSort
+             * 时间复杂度：O(n + k)  k是数据范围
+             * 空间复杂度：O(k)
+             * 稳定性：稳定
+             * 原地排序：否
+             * 
+             * 核心思想：
+             * 1. 统计每个元素出现的次数
+             * 2. 根据统计结果重建有序数组
+             * 
+             * 适用场景：
+             * - 数据范围不大（k 不太大）
+             * - 数据都是非负整数
+             * - 需要稳定排序
+             */
+
+            // 基础版本：适用于非负整数
+            function countingSort(arr) {
+                if (arr.length <= 1) return arr;
+
+                // 1. 找出最大值，确定计数数组的长度
+                const max = Math.max(...arr);
+                
+                // 2. 创建计数数组并初始化为0
+                const countArr = new Array(max + 1).fill(0);
+                
+                // 3. 统计每个元素出现的次数
+                for (let i = 0; i < arr.length; i++) {
+                    countArr[arr[i]]++;
+                }
+                
+                // 4. 根据计数数组重建排序后的数组
+                const result = [];
+                for (let i = 0; i < countArr.length; i++) {
+                    // 如果该数字出现了 countArr[i] 次，就添加 countArr[i] 次
+                    while (countArr[i] > 0) {
+                        result.push(i);
+                        countArr[i]--;
+                    }
+                }
+                
+                return result;
+            }
+
+            // 优化版本：支持负数和更大范围
+            function countingSortOptimized(arr) {
+                if (arr.length <= 1) return arr;
+
+                // 1. 找出最大值和最小值
+                let max = arr[0];
+                let min = arr[0];
+                for (let i = 1; i < arr.length; i++) {
+                    if (arr[i] > max) max = arr[i];
+                    if (arr[i] < min) min = arr[i];
+                }
+                
+                // 2. 计算范围，创建计数数组
+                const range = max - min + 1;
+                const countArr = new Array(range).fill(0);
+                
+                // 3. 统计每个元素出现的次数（需要偏移 min）
+                for (let i = 0; i < arr.length; i++) {
+                    countArr[arr[i] - min]++;
+                }
+                
+                // 4. 重建排序后的数组
+                const result = [];
+                for (let i = 0; i < countArr.length; i++) {
+                    while (countArr[i] > 0) {
+                        result.push(i + min);  // 还原真实值
+                        countArr[i]--;
+                    }
+                }
+                
+                return result;
+            }
+
+            // 稳定版本：保持相同元素的相对顺序
+            function countingSortStable(arr) {
+                if (arr.length <= 1) return arr;
+
+                // 1. 找出最大值和最小值
+                let max = arr[0];
+                let min = arr[0];
+                for (let i = 1; i < arr.length; i++) {
+                    if (arr[i] > max) max = arr[i];
+                    if (arr[i] < min) min = arr[i];
+                }
+                
+                // 2. 创建计数数组
+                const range = max - min + 1;
+                const countArr = new Array(range).fill(0);
+                
+                // 3. 统计每个元素出现的次数
+                for (let i = 0; i < arr.length; i++) {
+                    countArr[arr[i] - min]++;
+                }
+                
+                // 4. 累加计数数组（关键步骤：保证稳定性）
+                for (let i = 1; i < countArr.length; i++) {
+                    countArr[i] += countArr[i - 1];
+                }
+                
+                // 5. 从后向前遍历原数组，构建结果数组（保证稳定性）
+                const result = new Array(arr.length);
+                for (let i = arr.length - 1; i >= 0; i--) {
+                    const index = arr[i] - min;
+                    result[countArr[index] - 1] = arr[i];
+                    countArr[index]--;
+                }
+                
+                return result;
+            }
+
+            // 测试用例
+            console.log('=== 基础版本 ===');
+            console.log(countingSort([3, 1, 4, 1, 5, 9, 2, 6]));
+            // 输出: [1, 1, 2, 3, 4, 5, 6, 9]
+
+            console.log('\n=== 优化版本（支持负数）===');
+            console.log(countingSortOptimized([3, -1, 4, 1, -5, 9, 2, 6]));
+            // 输出: [-5, -1, 1, 2, 3, 4, 6, 9]
+
+            console.log('\n=== 稳定版本 ===');
+            console.log(countingSortStable([3, 1, 4, 1, 5, 9, 2, 6]));
+            // 输出: [1, 1, 2, 3, 4, 5, 6, 9]
+
+            // 性能测试
+            console.log('\n=== 性能对比 ===');
+            const largeArr = Array.from({ length: 10000 }, () => Math.floor(Math.random() * 100));
+            
+            console.time('计数排序');
+            countingSortOptimized([...largeArr]);
+            console.timeEnd('计数排序');
+            
+            console.time('原生sort');
+            [...largeArr].sort((a, b) => a - b);
+            console.timeEnd('原生sort');
+        </script>
+    </body>
+</html>

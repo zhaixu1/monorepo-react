@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 归并算法
+
+        /**
+         * 归并算法：将两个有序数组合并成一个有序数组
+         * 这行代码的执行顺序完全遵循“先深度优先递归，后回溯执行”的原则。
+         * 简单来说：必须先把参数里的函数算完，拿到了结果，才能执行外面的 merge。
+         * 
+         * 为什么先深度优先递归，后回溯执行？
+         * 因为先深度优先递归，后回溯执行，可以保证先拿到参数里的函数的结果，才能执行外面的 merge。
+         * 
+         * 为什么必须先把参数里的函数算完，才能执行外面的 merge？
+         * 因为必须先把参数里的函数算完，才能执行外面的 merge。
+         * 
+         * 为什么必须先把参数里的函数算完，才能执行外面的 merge？
+         * 因为必须先把参数里的函数算完，才能执行外面的 merge。
+         * 
+         * 
+        */
+        function mergeSort(arr) {
+            const length = arr.length;
+            if(length <= 1) return arr;
+            const middle = Math.floor(length / 2);
+            const left = arr.slice(0, middle);
+            const right = arr.slice(middle);
+            return merge(mergeSort(left), mergeSort(right));
+        }
+        function merge(left, right) {
+            const result = [];
+            while(left.length > 0 && right.length > 0) {
+                if(left[0] < right[0]) {
+                    result.push(left.shift());
+                } else {
+                    result.push(right.shift());
+                }
+            }
+            return result.concat(left).concat(right);
+        }
+        console.log(mergeSort([1, 3, 2, 4, 5]));
+    </script>
+</body>
+</html>

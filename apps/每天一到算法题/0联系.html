@@ -1,25 +1,26 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <script>
-        function sumTwo(arr, target) {
-            let map = new Map();
-            for(let i = 0; i < arr.length; i++) {
-                if(map.has(target - arr[i])) {
-                    return [map.get(target - arr[i]), i]
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+    </head>
+    <body>
+        <script>
+            function insertSort(arr) {
+                
+                for (let i = 1; i < arr.length; i++) {
+                    let preIndex = i - 1;
+                    let current = arr[i]; // 当前元素值
+                    while(preIndex >= 0 && arr[preIndex] > current) {
+                        arr[preIndex + 1] = arr[preIndex];
+                        preIndex--;
+                    }
+                    arr[preIndex + 1] = current;
                 }
-                map.set(arr[i], i);
+                return arr;
             }
-            return []
-        }
-
-        console.log(sumTwo([2, 7, 11, 15], 17), 'sumTwo');
-
-    </script>
-</body>
+            
+        </script>
+    </body>
 </html>
