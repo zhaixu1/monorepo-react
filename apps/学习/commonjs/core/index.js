@@ -22,8 +22,7 @@ class Module {
     //  如何使用: 类名.静态方法名()
     static resolveFilename(filename) {
         // 使用 path.resolve(__dirname, filename) 确保基于当前文件目录查找，避免受执行目录(CWD)影响
-        let absPath = path.resolve(__dirname, filename);
-
+  
         if (!fs.existsSync(absPath)) {
             const extensions = Object.keys(Module.extensions);
             for (const ext of extensions) {
