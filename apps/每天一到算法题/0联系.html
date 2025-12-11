@@ -7,19 +7,39 @@
     </head>
     <body>
         <script>
-            function insertSort(arr) {
-                
-                for (let i = 1; i < arr.length; i++) {
-                    let preIndex = i - 1;
-                    let current = arr[i]; // 当前元素值
-                    while(preIndex >= 0 && arr[preIndex] > current) {
-                        arr[preIndex + 1] = arr[preIndex];
-                        preIndex--;
+            /**
+             /**
+             * 快速排序的思想：
+             * 1. 从数组中选择一个基准值（pivot）。
+             * 2. 遍历数组，将小于基准值的元素放到基准值左边，大于基准值的放到右边。
+             * 3. 对左、右两个子数组递归重复以上步骤，最后将分区后的结果拼接起来。
+             * 这种“分治+递归”的方式可以高效地对数组进行排序。
+             *
+             * 时间复杂度：
+             *   - 最优和平均情况下：O(n log n)
+             *   - 最坏情况下：O(n^2) （当每次选的 pivot 都是最大或最小值时）
+             *
+             * 空间复杂度：
+             *   - 递归调用带来的栈空间复杂度为 O(log n)（平均情况）。
+             *   - 如果使用此实现（不断新建 left、right 数组并拼接），空间复杂度为 O(n)。
+             */
+            function quickSort(arr) {
+                if(arr.length <= 1) return arr;
+                const pivot = arr[0];
+
+                const left = [];
+                const right = [];
+                for(let i = 1; i < arr.length; i++) {
+                    if(arr[i] < pivot) {
+                        left.push(arr[i]);
+                    } else {
+                        right.push(arr[i]);
                     }
-                    arr[preIndex + 1] = current;
                 }
-                return arr;
+                return [...quickSort(left), pivot, ...quickSort(right)]
             }
+
+            console.log(quickSort([3, 2, 1, 23,4,235,26,75]), 'quickSort');
             
         </script>
     </body>

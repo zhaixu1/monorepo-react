@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Simple Vuex Demo</title>
+</head>
+<body>
+    <div id="app" style="display: none;">
+        <h1>简易版 Vuex 测试</h1>
+        <p>当前数字 (State): <strong>{{ $store.state.count }}</strong></p>
+        <p>两倍数字 (Getters): <strong>{{ $store.getters.doubleCount }}</strong></p>
+        
+        <div style="margin-top: 20px;">
+            <button @click="add">同步增加 (Mutation +1)</button>
+            <button @click="asyncAdd">异步增加 (Action +2)</button>
+        </div>
+    </div>
+
+    <script type="module">
+        console.log('Script started');
+        // 引入 Vue 2 的 ESM 版本
+        import Vue from 'https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.esm.browser.js'
+        // 引入我们要测试的 Vuex 实现
+        import Vuex from './index.js'
+
+        console.log('Vue loaded:', Vue);
+        console.log('Vuex loaded:', Vuex);
+
+        // 1. 安装插件
+        try {
+            Vue.use(Vuex);
+            console.log('Vuex plugin installed');
+        } catch (e) {
+            console.error('Plugin install failed:', e);
+        }
+
+        // 2. 创建 Store
+        const store = new Vuex.Store({
+            state: {
+                count: 10
+            },
+            getters: {
+                doubleCount(state) {
+                    return state.count * 2;
+                }
+            },
+            mutations: {
+                increment(state, payload) {
+                    state.count += payload;
+                }
+            },
+            actions: {
+                // context 解构出 commit
+                asyncIncrement({ commit }, payload) {
+                    console.log('执行异步操作...');
+                    setTimeout(() => {
+                        commit('increment', payload);
+                        console.log('异步操作完成');
+                    }, 1000);
+                }
+            }
+        });
+
+        // 3. 创建 Vue 实例
+        try {
+            const app = new Vue({
+                el: '#app',
+                store, // 注入 store
+                methods: {
+                    add() {
+                        this.$store.commit('increment', 1);
+                    },
+                    asyncAdd() {
+                        this.$store.dispatch('asyncIncrement', 2);
+                    }
+                },
+                mounted() {
+                     console.log('Vue mounted!');
+                     // 挂载成功后显示
+                     this.$el.style.display = 'block';
+                }
+            });
+            console.log('Vue instance created', app);
+        } catch (e) {
+            console.error('Vue init failed:', e);
+        }
+
+        console.log('app', this);
+    </script>
+</body>
+</html>

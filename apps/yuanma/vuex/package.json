@@ -1,5 +1,5 @@
 {
-  "name": "esbuild",
+  "name": "vuex",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -8,5 +8,6 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "packageManager": "pnpm@10.13.1"
 }

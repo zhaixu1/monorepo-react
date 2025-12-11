@@ -3,23 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>三数之和</title>
 </head>
 <body>
     <script>
         /**
          * 三数之和
-         * @param {*} arr 
-         * @param {*} target 
-         * @returns 
+         * @param {number[]} nums - 输入数组
+         * @returns {number[][]} - 所有和为 0 的三元组
          * 
-         * 采用双指针的方式
-         * 
-         * 
+         * 思路：排序 + 双指针
+         * 时间复杂度：O(n²)
+         * 空间复杂度：O(1)（不计算结果数组）
          */
-        function threeNum(arr, target) {
-            
+        function threeSum(nums) {
+            const result = [];
+            const n = nums.length;
+
+            // 1. 排序（升序）
+            nums.sort((a, b) => a - b);
+
+            // 2. 遍历数组，固定第一个数 nums[i]
+            for (let i = 0; i < n - 2; i++) {
+                // 剪枝优化：如果当前数已经大于 0，后面不可能有解了
+                // 因为数组已排序，后面的数都比当前大，三个正数相加不可能等于 0
+                if (nums[i] > 0) break;
+
+                // 去重：跳过重复的第一个数
+                // 为什么是 i > 0？因为第一个数不需要和"前一个"比较
+                if (i > 0 && nums[i] === nums[i - 1]) continue;
+
+                // 3. 双指针：在 [i+1, n-1] 范围内寻找另外两个数
+                let left = i + 1;
+                let right = n - 1;
+
+                while (left < right) {
+                    const sum = nums[i] + nums[left] + nums[right];
+
+                    if (sum === 0) {
+                        // 找到一组解
+                        result.push([nums[i], nums[left], nums[right]]);
+
+                        // 去重：跳过重复的左指针
+                        while (left < right && nums[left] === nums[left + 1]) {
+                            left++;
+                        }
+                        // 去重：跳过重复的右指针
+                        while (left < right && nums[right] === nums[right - 1]) {
+                            right--;
+                        }
+
+                        // 移动双指针，继续寻找下一组解
+                        left++;
+                        right--;
+                    } else if (sum < 0) {
+                        // 和太小了，需要更大的数，左指针右移
+                        left++;
+                    } else {
+                        // 和太大了，需要更小的数，右指针左移
+                        right--;
+                    }
+                }
+            }
+
+            return result;
         }
+
+        // 测试用例
+        const nums1 = [-1, 0, 1, 2, -1, -4];
+        console.log('输入:', nums1);
+        console.log('输出:', threeSum([...nums1]));
+        // 预期: [[-1, -1, 2], [-1, 0, 1]]
+
+        const nums2 = [0, 0, 0, 0];
+        console.log('输入:', nums2);
+        console.log('输出:', threeSum([...nums2]));
+        // 预期: [[0, 0, 0]]
+
+        const nums3 = [-2, 0, 1, 1, 2];
+        console.log('输入:', nums3);
+        console.log('输出:', threeSum([...nums3]));
+        // 预期: [[-2, 0, 2], [-2, 1, 1]]
     </script>
 </body>
 </html>

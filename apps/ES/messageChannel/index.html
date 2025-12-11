@@ -55,8 +55,10 @@
         
         // 1. 创建 MessageChannel
         const channel = new MessageChannel();
-        const port1 = channel.port1; // 主页面保留
-        const port2 = channel.port2; // 发送给 iframe
+        // port1 表示主页面持有、用于接收和发送消息的端口
+        const port1 = channel.port1;
+        // port2 表示将被发送（通过 postMessage 传递）给 iframe 端，用于 iframe 与主页面通信的端口
+        const port2 = channel.port2;
 
         // 2. 监听 port1 的消息
         port1.onmessage = (event) => {

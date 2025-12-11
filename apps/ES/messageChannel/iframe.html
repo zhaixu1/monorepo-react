@@ -44,6 +44,7 @@
 
                 // 监听端口消息
                 port.onmessage = (e) => {
+                    console.log(e, 'e');
                     log('收到主页面消息: ' + e.data);
                 };
 

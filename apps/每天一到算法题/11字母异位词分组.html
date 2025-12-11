@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+    </head>
+    <body>
+        <script>
+            /***
+             * 字母异位词分组算法
+             * 思路：哈希法
+             * 1. 将每一个进行字母排序， 相同的字母异位词会得到相同的字符串
+             * 2. 将相同的字符串放入一个数组中
+             * 3. 返回数组
+             * 
+             * 时间复杂度： O(n)
+             * 空间复杂度：O(n)
+             */
+            function groupAnagrams(strArrays) {
+                let map = new Map();
+                let result = [];
+                for(let str of strArrays) {
+                    const currentStr = Array.from(str).sort().join('');
+
+                    // if(map.has(currentStr)) {
+                    //     result.push(str)
+                    // }else {
+                    //     map.set(currentStr, [str]);
+                    // }
+
+                    let index = map.get(currentStr);
+                    if(index === undefined) {
+                        result.push([str])
+                        map.set(currentStr, result.length - 1)
+                    } else {
+                        result[index].push(str)
+                    }
+                }
+                return result;
+            }
+
+            console.log(groupAnagrams(['eat', 'tea', 'tan', 'ate', 'nat', 'bat']), 'groupAnagrams');
+        </script>
+    </body>
+</html>

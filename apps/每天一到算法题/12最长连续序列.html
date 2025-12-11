@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+    </head>
+    <body>
+        <script>
+
+            let nums = [100, 4, 200, 1, 3, 2, 5];
+
+            /**
+             * 最长连续序列
+             * 思路： set 法
+             * 1. 将数组转换为 set
+             * 2. 遍历 set，如果 set 中没有 num - 1，则以当前 num 为起点，计算连续序列的长度
+             * 3. 计算连续序列的长度，更新 maxLength
+             * 4. 返回 maxLength
+             * 
+             * 时间复杂度： O(n)
+             * 空间复杂度： O(n)
+            */
+            // function longestConsecutive(nums) {
+            //     let set = new Set(nums);
+
+            //     let maxLength = 0;
+
+            //     for(const num of set) {
+
+            //         if(!set.has(num - 1)) {
+            //             let currentNum = num;
+            //             let currentLength = 1;
+            //             while(set.has(currentNum + 1)) {
+            //                 currentNum++;
+            //                 currentLength++;
+            //             }
+            //             maxLength = Math.max(maxLength, currentLength);
+            //         }
+            //     }
+            //     return maxLength;
+            // }
+
+
+            function longestConsecutive(nums) {
+                let sortNums = nums.sort((a, b) => a - b);
+                let maxLength = 0;
+                let currentLength = 1;
+                for(let i = 0; i < sortNums.length; i++) {
+                    if(sortNums[i] + 1 === sortNums[i + 1]) {
+                        currentLength++;
+                    } else {
+                        maxLength = Math.max(maxLength, currentLength);
+                        currentLength = 1;
+                    }
+                }
+                return maxLength;
+            }
+            console.log(longestConsecutive(nums), 'longestConsecutive');
+        </script>
+    </body>
+</html>
