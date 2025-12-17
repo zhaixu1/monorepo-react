@@ -11,7 +11,7 @@ import { apiGet } from "../../aps/request";
 // import { apiGet } from '../../../../apis/request';
 // import { sendLog } from '../../../../utils/store/lib/apis';
 import { useToggle } from "zxreact-hooks";
-import { Modal } from "zxreact-components";
+import { Modal as ModalList } from "zxreact-components";
 
 interface ItemProps {
     item: any;

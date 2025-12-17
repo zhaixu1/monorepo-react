@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+    </head>
+    <body>
+        <script>
+            /***
+             * 标签：数组、哈希表、前缀和
+             *
+             * 题目：
+             * 给你一个整数数组 nums 和一个整数 k ，请你统计并返回 该数组中和为 k 的子数组的个数 。
+             * 子数组是数组中元素的连续非空序列。
+             *
+             */
+
+            function subarraySum(nums, k) {
+                const preSumCount = new Map();
+
+                // 这里设置 preSumCount.set(0, 1) 是为了处理前缀和恰好等于 k 的情况。
+                // 当子数组从下标 0 开始、前缀和正好等于 k 时，需要计入一次结果。
+                preSumCount.set(0, 1); 
+                console.log(preSumCount, 'preSumCount');
+                debugger
+                let preSum = 0;
+                let result = 0;
+
+                for(const num of nums) {
+                    preSum += num;
+
+                    if(preSumCount.has(preSum - k)) {
+                        result += preSumCount.get(preSum - k);
+                    }
+                    preSumCount.set(preSum, (preSumCount.get(preSum) || 0) + 1)
+                }
+
+                return result
+            }
+
+            // 示例
+            // console.log(subarraySum([1, 1, 1], 2)); // 2
+            // console.log(subarraySum([1, 2, 3], 3)); // 2
+            // console.log(subarraySum([1, 1, 1], 2));
+            // console.log(subarraySum([1, 2, 3, 4, 5], 3));
+            console.log(subarraySum([1, 2, 3, 0, 5], 5));
+        </script>
+    </body>
+</html>

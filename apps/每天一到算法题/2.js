@@ -1,21 +1,22 @@
 // 
 var str = 'asfsdfeddfssscegse'
 
-function longestSubstring(str) {
-    let map = new Map();
-    let start = 0;
-    let maxLength = 0;
-
-    for(let i = 0; i < str.length; i++) {
-        const currentData = str[i];
-
-        if(map.has(currentData)) {
-            start = Math.max(start, map.get(currentData) + 1);
-        }
-
-        map.set(currentData, i);
-        maxLength = Math.max(maxLength, i - start + 1);
-    }
-    return maxLength;
+function mergeSort(arr) {
+    const length = arr.length;
+    let middle = Math.floor(length / 2);
+    let left = arr.slice(0, middle);
+    let right = arr.slice(middle);
+    return merge(mergeSort(left), mergeSort(right));
 }
 
+function merge(left, right) {
+    let result = [];
+    while(left.length > 0 && right.length > 0) {
+        if(left[0] < right[0]) {
+            result.push(left.shift());
+        } else {
+            result.push(right.shift());
+        }
+    }
+    return result.concat(left).concat(right);
+}   
