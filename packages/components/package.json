@@ -36,6 +36,7 @@
     "access": "public"
   },
   "dependencies": {
-    "antd": "^5.26.4"
+    "antd": "^5.26.4",
+    "virtualizedtableforantd4": "^1.3.2"
   }
 }

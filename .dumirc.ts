@@ -16,6 +16,7 @@ export default defineConfig({
     atomDirs: [
       { type: 'hook', dir: 'packages/hooks/src' },
       { type: 'component', dir: 'packages/components/src' },
+      { type: 'bigscreen', dir: 'packages/bigscreen/src' },
     ],
   },
 
@@ -51,6 +52,10 @@ export default defineConfig({
       {
         title: '组件',
         link: '/components',
+      },
+      {
+        title: '大屏3D',
+        link: '/bigscreens',
       },
     ],
     //   sidebar: {
