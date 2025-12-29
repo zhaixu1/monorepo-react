@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>WebSocket 客户端示例</title>
+  <style>
+    * {
+      margin: 10px;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    .message-box {
+      width: 600px;
+      height: 400px;
+      border: 1px solid #ccc;
+      padding: 10px;
+      overflow-y: auto;
+      background-color: #f9f9f9;
+    }
+    .message {
+      margin: 5px 0;
+      padding: 8px;
+      border-radius: 4px;
+    }
+    .client-message {
+      background-color: #e3f2fd;
+      text-align: right;
+    }
+    .server-message {
+      background-color: #f1f8e9;
+      text-align: left;
+    }
+    input {
+      width: 480px;
+      height: 38px;
+      padding: 0 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      width: 100px;
+      height: 38px;
+      background-color: #2196f3;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #1976d2;
+    }
+  </style>
+</head>
+<body>
+  <h2>WebSocket 双向通信示例</h2>
+  <!-- 消息展示区域 -->
+  <div class="message-box" id="messageBox"></div>
+  <!-- 消息输入和发送 -->
+  <input type="text" id="msgInput" placeholder="请输入要发送的消息...">
+  <button onclick="sendMessage()">发送消息</button>
+
+  <script>
+    // 1. 初始化 WebSocket 连接（连接本地 3000 端口的 WebSocket 服务）
+    const ws = new WebSocket('ws://localhost:3000');
+    const messageBox = document.getElementById('messageBox');
+    const msgInput = document.getElementById('msgInput');
+
+    // 2. 监听连接成功事件
+    ws.onopen = () => {
+      addMessage('连接成功！可以开始发送消息', 'server-message');
+      console.log('WebSocket 已连接');
+    };
+
+    // 3. 监听接收服务端消息事件
+    ws.onmessage = (event) => {
+      addMessage(event.data, 'server-message');
+    };
+
+    // 4. 监听连接关闭事件
+    ws.onclose = () => {
+      addMessage('连接已断开', 'server-message');
+      console.log('WebSocket 已关闭');
+    };
+
+    // 5. 监听连接错误事件
+    ws.onerror = (error) => {
+      addMessage(`连接出错：${error.message}`, 'server-message');
+      console.error('WebSocket 错误：', error);
+    };
+
+    // 6. 发送消息函数
+    function sendMessage() {
+      const msg = msgInput.value.trim();
+      if (!msg) {
+        alert('请输入消息内容！');
+        return;
+      }
+      // 向服务端发送消息
+      ws.send(msg);
+      // 本地展示发送的消息
+      addMessage(msg, 'client-message');
+      // 清空输入框
+      msgInput.value = '';
+    }
+
+    // 7. 辅助函数：添加消息到展示区域
+    function addMessage(content, className) {
+      const msgElement = document.createElement('div');
+      msgElement.className = `message ${className}`;
+      msgElement.textContent = content;
+      messageBox.appendChild(msgElement);
+      // 滚动到最新消息
+      messageBox.scrollTop = messageBox.scrollHeight;
+    }
+
+    // 可选：按回车发送消息
+    msgInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        sendMessage();
+      }
+    });
+  </script>
+</body>
+</html>

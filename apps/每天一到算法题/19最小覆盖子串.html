@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /**
+         * 最小覆盖子串
+         * 
+         * 给定两个字符串 s 和 t，长度分别是 m 和 n，返回 s 中的 最短窗口 子串
+         * 使得该子串包含 t 中的每一个字符（包括重复字符）。如果没有这样的子串，返回空字符串 ""。
+         * 
+         */
+
+         function minSubstring(s, t) {
+            if (!s || !t || t.length > s.length) return '';
+
+            // ASCII 计数（如需支持更大字符集，可改用 Map）
+            const need = new Array(128).fill(0);
+            for (let i = 0; i < t.length; i++) {
+                need[t.charCodeAt(i)]++;
+            }
+
+            let needCount = t.length; // 还差多少个字符（包含重复）
+            let left = 0;
+            let bestLen = Infinity;
+            let bestStart = 0;
+
+            for (let right = 0; right < s.length; right++) {
+                const rCode = s.charCodeAt(right);
+                // 如果该字符是 t 需要的（need[rCode] > 0），则补上一个
+                if (need[rCode] > 0) needCount--;
+                // 无论是否需要，都减一：表示窗口里加入了这个字符
+                need[rCode]--;
+
+                // 当 needCount == 0，说明窗口已经覆盖 t，开始收缩 left 找最短
+                while (needCount === 0) {
+                    const windowLen = right - left + 1;
+                    if (windowLen < bestLen) {
+                        bestLen = windowLen;
+                        bestStart = left;
+                    }
+
+                    const lCode = s.charCodeAt(left);
+                    // left 右移前，把窗口移出的字符“还回去”
+                    need[lCode]++;
+                    // 如果还回去后 need[lCode] > 0，说明这个字符是必须的，被移出后窗口不再满足覆盖
+                    if (need[lCode] > 0) needCount++;
+                    left++;
+                }
+            }
+
+            return bestLen === Infinity ? '' : s.slice(bestStart, bestStart + bestLen);
+         }
+
+         // 测试用例（打开浏览器控制台查看）
+         console.log(minSubstring('ADOBECODEBANC', 'ABC'), '=>', 'BANC');
+         console.log(minSubstring('a', 'a'), '=>', 'a');
+         console.log(minSubstring('a', 'aa'), '=>', '');
+         console.log(minSubstring('aa', 'aa'), '=>', 'aa');
+         console.log(minSubstring('ab', 'b'), '=>', 'b');
+    </script>
+</body>
+</html>

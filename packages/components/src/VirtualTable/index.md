@@ -2,3 +2,5 @@
 
 ### 使用 **virtualizedtableforantd4** 插件重写 ant-table 表格
 
+<code src="./demo/index.tsx"></code>
+

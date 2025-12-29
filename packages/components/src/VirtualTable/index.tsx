@@ -1,22 +1,45 @@
-import React, { useRef } from 'react'
-import { Table, Space, Tooltip, Alert, Button } from 'antd';
-import './src/index.css'
+import React, { useRef, useMemo } from 'react'
+import { Table, TableProps } from 'antd';
+// import './src/index.css'
 
 
 
-function VirtualTable(props) {
+function VirtualTable(props: any) {
 
-    const tableRef = useRef();
+    const tableRef = useRef<TableProps<any>>(null);
 
-    const {columns = [], dataSource = [], disableVirtual } = props;
+    const { columns = [], dataSource = [], pagination, defaultPageSize = 10 } = props;
 
+    const otherProps = useMemo(() => {
+        const newProps = { ...props };
+        ['title', 'toolBarRender', 'ref', 'child', 'columns', 'dataSource', 'pagination', 'defaultPageSize'].forEach((key) => {
+          delete newProps[key];
+        });
+        return newProps;
+      }, [props]);
+
+    const mergedPagination = useMemo(() => {
+        if (pagination === false) return false;
+        if (pagination === undefined || pagination === true) return { pageSize: defaultPageSize };
+        return { pageSize: defaultPageSize, ...pagination };
+    }, [pagination, defaultPageSize]);
     
     return (
-        <div className="">
-
+        <div className="zx-virtual-table">
+        
+            <Table
+                ref={tableRef as any}
+                {...otherProps}
+                columns={columns}
+                dataSource={dataSource}
+                pagination={mergedPagination}
+               
+            />
 
         </div>
     )
 
 
 }
+
+export default VirtualTable;

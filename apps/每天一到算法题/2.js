@@ -1,22 +1,23 @@
 // 
-var str = 'asfsdfeddfssscegse'
+let nums = [100, 4, 200, 1, 2, 5, 3];
 
-function mergeSort(arr) {
-    const length = arr.length;
-    let middle = Math.floor(length / 2);
-    let left = arr.slice(0, middle);
-    let right = arr.slice(middle);
-    return merge(mergeSort(left), mergeSort(right));
-}
+function maxSubArray(nums) {
+    let maxSum = 0;
+    let numsSet = new Set(nums);
 
-function merge(left, right) {
-    let result = [];
-    while(left.length > 0 && right.length > 0) {
-        if(left[0] < right[0]) {
-            result.push(left.shift());
-        } else {
-            result.push(right.shift());
+    for(let num of numsSet) {
+        if(!numsSet.has(num -1)) {
+            let currentNum = num;
+            let currentSum = 1;
+            while(numsSet.has(currentNum + 1)) {
+                currentSum++
+                currentNum++;
+                maxSum = Math.max(maxSum, currentSum);
+            }
         }
     }
-    return result.concat(left).concat(right);
-}   
+    return maxSum;
+}
+
+maxSubArray(nums);
+console.log(maxSubArray(nums), 'maxSubArray');
