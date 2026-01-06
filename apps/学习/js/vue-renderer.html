@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue Custom Renderer (Canvas Example)</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+        body { font-family: sans-serif; padding: 20px; }
+        canvas { border: 1px solid #333; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Vue 3 自定义渲染器演示</h1>
+    <p>这个例子展示了如何使用 <code>createRenderer</code> 创建一个将 Vue 组件渲染到 Canvas 的渲染器，而不是默认的 DOM。</p>
+    <p>点击画布可以看到方块移动，这完全是由 Vue 的响应式系统驱动的。</p>
+
+    <canvas id="app" width="600" height="400"></canvas>
+
+    <script>
+        const { createRenderer, ref, h } = Vue;
+
+        // 1. 定义画布上的元素类（模拟 DOM 节点）
+        // 在 DOM 中是 HTMLDivElement，在这里我们定义自己的对象结构
+        class CanvasElement {
+            constructor(type) {
+                this.type = type;
+                this.x = 0;
+                this.y = 0;
+                this.width = 0;
+                this.height = 0;
+                this.color = '#000';
+                this.children = [];
+                this.parent = null;
+            }
+            draw(ctx) {
+                if (this.type === 'rect') {
+                    ctx.fillStyle = this.color;
+                    ctx.fillRect(this.x, this.y, this.width, this.height);
+                }
+                // 递归绘制子节点
+                this.children.forEach(child => child.draw(ctx));
+            }
+        }
+
+        // 2. 实现 nodeOps (渲染器操作集)
+        // 这些是 Vue 核心用来操作 "宿主环境" 的 API
+        const nodeOps = {
+            // 创建元素: 类似于 document.createElement
+            createElement(tag) {
+                // 这里我们只处理 'rect'，实际情况可以支持更多图形
+                return new CanvasElement(tag);
+            },
+            
+            // 处理属性更新: 类似于 el.setAttribute / el.prop = value
+            patchProp(el, key, prevValue, nextValue) {
+                el[key] = nextValue;
+            },
+
+            // 插入元素: 类似于 parent.appendChild
+            insert(el, parent) {
+                el.parent = parent;
+                parent.children.push(el);
+            },
+
+            // 删除元素: 类似于 parent.removeChild
+            remove(el) {
+                if (el.parent) {
+                    const idx = el.parent.children.indexOf(el);
+                    if (idx > -1) el.parent.children.splice(idx, 1);
+                    el.parent = null;
+                }
+            },
+
+            // 创建文本 (Canvas 简单示例暂不处理文本，仅作占位)
+            createText(text) {},
+            parentNode(node) { return node.parent; },
+            nextSibling(node) {},
+            setElementText(node, text) {}
+        };
+
+        // 3. 创建渲染器
+        const renderer = createRenderer(nodeOps);
+
+        // 4. 定义一个 Vue 组件
+        const App = {
+            setup() {
+                const x = ref(50);
+                const y = ref(50);
+                const color = ref('red');
+
+                //简单的动画逻辑
+                let speedX = 2;
+                let speedY = 2;
+
+                function animate() {
+                    if (x.value > 550 || x.value < 0) speedX *= -1;
+                    if (y.value > 350 || y.value < 0) speedY *= -1;
+                    
+                    x.value += speedX;
+                    y.value += speedY;
+                    
+                    requestAnimationFrame(animate);
+                }
+                
+                // 改变颜色
+                function changeColor() {
+                    color.value = color.value === 'red' ? 'blue' : 'red';
+                }
+
+                animate();
+
+                // 渲染函数：返回虚拟节点 (VNode)
+                // 注意：这里的 'rect' 对应 nodeOps.createElement 中的 tag
+                return () => h('rect', {
+                    x: x.value,
+                    y: y.value,
+                    width: 50,
+                    height: 50,
+                    color: color.value,
+                    onClick: changeColor // 这里的点击事件需要我们在 Canvas 中自己实现坐标判定，为简化略过
+                });
+            }
+        };
+
+        // 5. 初始化 Canvas 环境
+        const canvas = document.getElementById('app');
+        const ctx = canvas.getContext('2d');
+        
+        // 创建一个根容器对象，充当 Vue 挂载的 "body"
+        const rootContainer = new CanvasElement('root');
+
+        // 6. 使用自定义渲染器挂载应用
+        // renderer.createApp 类似于标准的 Vue.createApp，但使用我们定义的 nodeOps
+        const app = renderer.createApp(App);
+        app.mount(rootContainer); // 挂载到我们的虚拟根容器
+
+        // 7. 启动绘制循环 (Ticker)
+        // Vue 负责更新 rootContainer 里的数据，我们需要不断把数据画到 Canvas 上
+        function drawLoop() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            rootContainer.draw(ctx);
+            requestAnimationFrame(drawLoop);
+        }
+        drawLoop();
+
+    </script>
+</body>
+</html>
+

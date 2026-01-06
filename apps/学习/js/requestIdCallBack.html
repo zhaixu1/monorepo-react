@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>requestIdleCallback Time Slicing Example</title>
+    <style>
+        #container {
+            font-family: monospace;
+            margin-top: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+        .item {
+            padding: 2px;
+            border-bottom: 1px dashed #eee;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #status {
+            margin-top: 10px;
+            color: blue;
+        }
+    </style>
+</head>
+<body>
+    <h1>requestIdleCallback 分片渲染示例</h1>
+    <p>点击按钮开始生成 10,000 个节点。如果不分片，页面可能会卡顿。使用 requestIdleCallback 可以利用浏览器空闲时间进行分片处理。</p>
+    
+    <button id="startBtn">开始生成 (10,000 items)</button>
+    <div id="status"></div>
+    <div id="container"></div>
+
+    <script>
+        const container = document.getElementById('container');
+        const startBtn = document.getElementById('startBtn');
+        const statusDiv = document.getElementById('status');
+        
+        // 总任务量
+        const TOTAL_ITEMS = 10000;
+        let itemsProcessed = 0;
+
+        function expensiveOperation() {
+            // 模拟耗时操作，例如复杂的计算或DOM创建
+            const div = document.createElement('div');
+            div.className = 'item';
+            div.textContent = `Item ${itemsProcessed + 1} - Generated at ${new Date().toLocaleTimeString()}`;
+            container.appendChild(div);
+            itemsProcessed++;
+        }
+
+        function workLoop(deadline) {
+            // requestIdleCallback 会自动传入 deadline 参数
+            console.log('当前帧剩余时间:', deadline.timeRemaining());
+            
+            // deadline.timeRemaining() 获取当前帧剩余的空闲时间
+            // 如果剩余时间大于 1ms 或者 didTimeout (任务超时强制执行)，则继续执行任务
+            while ((deadline.timeRemaining() > 1 || deadline.didTimeout) && itemsProcessed < TOTAL_ITEMS) {
+                expensiveOperation();
+            }
+
+            // 更新状态
+            statusDiv.textContent = `已处理: ${itemsProcessed} / ${TOTAL_ITEMS}`;
+
+            // 如果还有任务未完成，继续申请下一个空闲时间片
+            if (itemsProcessed < TOTAL_ITEMS) {
+                requestIdleCallback(workLoop);
+            } else {
+                statusDiv.textContent = '完成！所有任务已处理。';
+                startBtn.disabled = false;
+            }
+        }
+
+        startBtn.addEventListener('click', () => {
+            // 重置状态
+            container.innerHTML = '';
+            itemsProcessed = 0;
+            startBtn.disabled = true;
+            statusDiv.textContent = '开始处理...';
+            // for (let i = 0; i < TOTAL_ITEMS; i++) {
+            //             expensiveOperation();
+            // }
+            // 检查浏览器是否支持 requestIdleCallback
+            if ('requestIdleCallback' in window) {
+                requestIdleCallback(workLoop);
+            } else {
+                statusDiv.textContent = '您的浏览器不支持 requestIdleCallback，将使用同步方式执行（可能会卡顿）。';
+                // 降级处理：直接同步执行
+                setTimeout(() => {
+                    for (let i = 0; i < TOTAL_ITEMS; i++) {
+                        expensiveOperation();
+                    }
+                    statusDiv.textContent = '完成！（同步执行）';
+                    startBtn.disabled = false;
+                }, 100);
+            }
+        });
+    </script>
+</body>
+</html>

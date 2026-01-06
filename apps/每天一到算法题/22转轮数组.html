@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+    </head>
+    <body>
+        <script>
+            /***
+             * 轮转数组：
+             * 给定一个整数数组 nums，将数组中的元素向右轮转 k 个位置，其中 k 是非负数。
+             *
+             * 思路： 首先取取数，然后进行三次翻转
+             * 
+             * 时间复杂度： O(n)
+             * 空间复杂度： O(1)
+             * 稳定性：稳定
+             * 原地排序：是
+             */
+
+            let arr = [1, 2, 3, 4, 5],
+                k = 2;
+            function rotateByReverse(arr, k) {
+                let len = arr.length;
+                k = k % arr.length;
+
+                const reserve = (arr, start, end) => {
+                    while (start < end) {
+                        [arr[start], arr[end]] = [arr[end], arr[start]];
+                        start++;
+                        end--;
+                    }
+                };
+
+                reserve(arr, 0, len - 1);
+                reserve(arr, 0, k - 1);
+                reserve(arr, k, len - 1);
+
+                return arr;
+            }
+
+            // 测试
+            const arr2 = [1, 2, 3, 4, 5, 6, 7];
+            rotateByReverse(arr2, 3);
+        </script>
+    </body>
+</html>

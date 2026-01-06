@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>除自身以外数组的乘积</title>
+</head>
+<body>
+    <script>
+        /**
+         * 238. 除自身以外数组的乘积
+         * 给你一个整数数组 nums，返回 数组 answer ，其中 answer[i] 等于 nums 中除 nums[i] 之外其余各元素的乘积。
+         * 题目数据 保证 数组 nums之中任意元素的全部前缀元素和后缀的乘积都在  32 位 整数范围内。
+         * 请不要使用除法，且在 O(n) 时间复杂度内完成此题。
+         * 
+         * 时间
+         * 1. 计算左侧乘积
+         * 2. 计算右侧乘积并乘入结果
+         * 3. 返回结果
+         * 
+         * 时间复杂度：O(n)
+         * 空间复杂度：O(1)
+         * 稳定性：稳定
+         * 原地排序：是
+         * @param {number[]} nums
+         * @return {number[]}
+         */
+        var productExceptSelf = function(nums) {
+            const n = nums.length;
+            const answer = new Array(n).fill(1);
+
+            // 1. 计算左侧乘积
+            // answer[i] 目前存储的是 i 左侧所有元素的乘积
+            let leftProduct = 1;
+            for (let i = 0; i < n; i++) {
+                answer[i] = leftProduct;
+                leftProduct *= nums[i];
+            }
+
+            // 2. 计算右侧乘积并乘入结果
+            // rightProduct 存储的是 i 右侧所有元素的乘积
+            let rightProduct = 1;
+            for (let i = n - 1; i >= 0; i--) {
+                answer[i] *= rightProduct;
+                rightProduct *= nums[i];
+            }
+
+            return answer;
+        };
+
+        // 测试用例
+        const nums1 = [1, 2, 3, 4];
+        console.log('输入:', nums1);
+        console.log('输出:', productExceptSelf(nums1)); // [24, 12, 8, 6]
+
+        const nums2 = [-1, 1, 0, -3, 3];
+        console.log('输入:', nums2);
+        console.log('输出:', productExceptSelf(nums2)); // [0, 0, 9, 0, 0]
+    </script>
+</body>
+</html>

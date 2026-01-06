@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+    </head>
+    <body>
+        <script>
+            function curry(fn) {
+                console.log(fn.length, "fn.length");
+                let length = fn.length;
+                return function curryFn(...args) {
+                    console.log(args.length, "args.length");
+                    if (args.length >= length) {
+                        return fn(...args);
+                    } else {
+                        // 这一段代码的意思是：当前传入参数(args)数量还没达到函数fn的参数个数(length)时，
+                        // 不调用fn，而是返回一个新函数（通过bind实现），把已经收到的参数(args)“记住”，
+                        // 等下次调用时继续收集剩余的参数，直到足够为止。这就是柯里化的递归收集过程。
+                        return curryFn.bind(null, ...args);
+                    }
+                };
+            }
+
+            function add(a, b, c) {
+                return a + b + c;
+            }
+
+            const curryAdd = curry(add);
+            console.log(curryAdd, "curryAdd");
+
+            setTimeout(() => {
+                console.log(curryAdd(1)(2), "curryAdd");
+            }, 1000);
+
+
+
+            function sum2(a, b, c) {
+                return a + b + c;
+            }
+
+            const sum2Bind = sum2.bind(null, 4, 5, 6)
+            console.log(sum2Bind, 'sum2Bind');
+            
+        </script>
+    </body>
+</html>

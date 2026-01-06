@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // DOMContentLoaded 和load时间的区别？
+        // DOMContentLoaded 事件在DOM树构建完成后触发，
+        // 而load事件在所有资源（包括图片、子框架等）加载完成后触发。
+        window.addEventListener('DOMContentLoaded', () => {
+            console.log(new Date().getTime(), 'DOMContentLoaded');
+            console.log('DOMContentLoaded');
+            console.log(new Date().getTime(), 'DOMContentLoaded end');
+        })
+        window.addEventListener('load', () => {
+            console.log(new Date().getTime(), 'load');
+            console.log('load');
+            console.log(new Date().getTime(), 'load end');
+        })
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js" defer></script>
+</body>
+</html>

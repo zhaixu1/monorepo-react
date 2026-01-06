@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Bind 参数合并演示</title>
+    </head>
+    <body>
+        <h2>打开控制台查看 bind 参数合并演示</h2>
+        <script>
+            // 原始函数：用来打印它最终接收到了什么参数
+            function originalFn(...args) {
+                console.log("✅ 原始函数执行了，收到的完整参数:", args);
+            }
+
+            console.log("--- 步骤 1: 创建 bind 函数 ---");
+            // 使用 bind 创建一个新函数，预置参数 1 和 2
+            // 这里的 ...args 相当于柯里化里的“老参数”
+            const boundFn = originalFn.bind(null, 1, 2);
+            console.log("已创建 boundFn，它'记住'了参数: [1, 2]");
+
+            console.log("\n--- 步骤 2: 调用 bind 函数 ---");
+            // 调用这个新函数，传入参数 3
+            // 这里的 3 相当于柯里化里的“新参数”
+            console.log("执行 boundFn(3)...");
+            const boundFn2 = boundFn.bind(null, 3)
+            boundFn2(4)
+            // 预期结果：originalFn 接收到 [1, 2, 3]
+            // 证明：bind 内部机制自动把 [1, 2] 和 [3] 拼接到了一起
+        </script>
+    </body>
+</html>
+

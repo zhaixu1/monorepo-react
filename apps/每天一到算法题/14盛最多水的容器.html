@@ -9,6 +9,22 @@
     <script>
         var arr = [1,8,6,2,5,4,8,3,7];
 
+        /**
+         * 盛最多水的容器
+         * 
+         * 
+         * 
+         * 思路：（双指针以及贪心算法）
+         * - 目的找出长X宽的最大值。
+         * -  长度： right - left
+         * -  宽度： Math.min(arr[left], arr[right])
+         * - 面积是 长x宽
+         * - 如果 left < right,那么移动指针，如何移动指针可以找出最大的呢，就是移动 arr[left], arr[left]较短的。
+         * -  
+         * 
+         * 时间复杂度：O(n)
+         * 空间复杂度：O(1)
+        */
         function coverMaxWater(arr) {
             let left = 0;
             let right = arr.length - 1;
