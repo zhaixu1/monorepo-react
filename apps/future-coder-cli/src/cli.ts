@@ -5,7 +5,8 @@ import pc from 'picocolors'
 
 // 运行命令行
 export const runCLI = () => {
-    console.log(pc.green('启动 future-coder-cli' + process.argv));
+    console.log(pc.green('启动 future-coder-cli'));
+    console.log(pc.blue('参数是：' + process.argv));
     program.parse(process.argv)
 }
 

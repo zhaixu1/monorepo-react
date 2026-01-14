@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /**
+         * 二叉树的前序遍历
+         * 
+         */
+        class TreeNode {
+            constructor(value) {
+                this.value = value
+                this.left = null
+                this.right = null
+            }
+        }
+        
+        function preorderTraversal(root) {
+            const res = [];
+
+            function dfs(node) {
+                if (!node) return;
+
+                res.push(node.value);
+
+                dfs(node.left);
+                dfs(node.right);
+            }
+
+            dfs(root);
+            return res;
+        }
+
+        const root = new TreeNode(1)
+        root.left = new TreeNode(4)
+        root.right = new TreeNode(3)
+        root.left.left = new TreeNode(5)
+        root.left.right = new TreeNode(6)
+        console.log(preorderTraversal(root))
+    </script>
+</body>
+</html>

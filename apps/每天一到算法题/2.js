@@ -1,23 +1,26 @@
-// 
-let nums = [100, 4, 200, 1, 2, 5, 3];
+let nums = [1, 2, 3, 4, 5];
 
-function maxSubArray(nums) {
-    let maxSum = 0;
-    let numsSet = new Set(nums);
+/**
+ * 
+ * @param {*} nums 
+ */
+function productExceptSelf(nums) {
+    let n = nums.length;
+    let answer = new Array(n).fill(1);
 
-    for(let num of numsSet) {
-        if(!numsSet.has(num -1)) {
-            let currentNum = num;
-            let currentSum = 1;
-            while(numsSet.has(currentNum + 1)) {
-                currentSum++
-                currentNum++;
-                maxSum = Math.max(maxSum, currentSum);
-            }
-        }
+    let leftProduct = 1;
+    for(let i = 0; i < n; i++) {
+        answer[i] = leftProduct;
+        leftProduct *= nums[i];
     }
-    return maxSum;
+
+    let rightProduct = 1;
+    for(let i = n - 1; i >= 0; i--) {
+        answer[i] *= rightProduct;
+        rightProduct *= nums[i];
+    }
+
+    return answer;
 }
 
-maxSubArray(nums);
-console.log(maxSubArray(nums), 'maxSubArray');
+console.log(productExceptSelf(nums), 'productExceptSelf');

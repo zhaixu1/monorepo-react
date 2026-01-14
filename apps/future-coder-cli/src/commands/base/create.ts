@@ -10,7 +10,7 @@ import { TEMPLATES } from '../../constants'
 
 export const create = (program: Command) => {
   return program
-    .command('create <project-name>')
+    .command('create [project-name]')
     .description('创建一个新项目')
     .option('-t, --template <template>', '指定模板名称')
     .option('-f, --force', '强制覆盖已存在的目录')

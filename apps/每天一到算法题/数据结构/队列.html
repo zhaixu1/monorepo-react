@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /**
+         * 队列 
+         *  特点：先进先出
+         *  入队：从队尾添加元素
+         *  出队：从队头添加元素
+         */
+        class Queue {
+            constructor(arr=[]) {
+                this.arr = arr
+            }
+            enqueue(item) {
+                this.arr.push(item)
+            }
+            dequeue() {
+                this.arr.shift()
+            }
+            front() {
+                return this.arr[0]
+            }
+            rear() {
+                return this.arr[this.arr.length - 1]
+            }
+            isEmpty() {
+                return this.arr.length === 0
+            }
+            size() {
+                return this.arr.length
+            }
+            clear() {
+                this.arr = []
+            }
+            print() {
+                console.log(this.arr)
+            }
+        } 
+
+        const queue = new Queue([1, 2, 3, 4, 5])
+        queue.enqueue(6)
+        console.log(queue.arr)
+        queue.dequeue();
+        console.log(queue.arr)
+        console.log(queue.front())
+        console.log(queue.rear())
+        console.log(queue.isEmpty())
+        console.log(queue.size())
+        queue.clear()
+        queue.print()
+    </script>
+</body>
+</html>

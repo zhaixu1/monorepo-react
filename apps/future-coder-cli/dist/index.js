@@ -82,10 +82,16 @@ var package_default = {
 
 // src/commands/base/info.ts
 var info = (program3) => {
-  return program3.command("info").argument("info").description("\u663E\u793A\u9879\u76EE\u4FE1\u606F").action(() => {
+  return program3.command("info").description("\u663E\u793A\u9879\u76EE\u4FE1\u606F").argument("[string]", "\u53EF\u9009\u7684\u5B57\u7B26\u4E32\u53C2\u6570").option("--first").option("-s, --separator <char>", "\u5206\u9694\u7B26").action((str, options, command) => {
     console.log(import_picocolors.default.green("\u9879\u76EE\u4FE1\u606F"));
     console.log(import_picocolors.default.blue("\u7248\u672C\u53F7: " + package_default.version));
     console.log(import_picocolors.default.blue("\u4F5C\u8005: " + package_default.author));
+    if (str) {
+      console.log(import_picocolors.default.cyan(`\u4F4D\u7F6E\u53C2\u6570 string: ${str}`));
+    }
+    if (options.separator) {
+      console.log(import_picocolors.default.yellow(`\u63A5\u6536\u5230\u7684\u5206\u9694\u7B26\u53C2\u6570: ${options.separator}`));
+    }
   });
 };
 
@@ -206,7 +212,7 @@ var TEMPLATES = {
 
 // src/commands/base/create.ts
 var create = (program3) => {
-  return program3.command("create <project-name>").description("\u521B\u5EFA\u4E00\u4E2A\u65B0\u9879\u76EE").option("-t, --template <template>", "\u6307\u5B9A\u6A21\u677F\u540D\u79F0").option("-f, --force", "\u5F3A\u5236\u8986\u76D6\u5DF2\u5B58\u5728\u7684\u76EE\u5F55").action(async (projectName, options) => {
+  return program3.command("create [project-name]").description("\u521B\u5EFA\u4E00\u4E2A\u65B0\u9879\u76EE").option("-t, --template <template>", "\u6307\u5B9A\u6A21\u677F\u540D\u79F0").option("-f, --force", "\u5F3A\u5236\u8986\u76D6\u5DF2\u5B58\u5728\u7684\u76EE\u5F55").action(async (projectName, options) => {
     try {
       if (!projectName) {
         console.error(import_picocolors4.default.red("\u9519\u8BEF: \u8BF7\u63D0\u4F9B\u9879\u76EE\u540D\u79F0"));
@@ -324,7 +330,8 @@ registerCommand(create);
 // src/cli.ts
 var import_picocolors5 = __toESM(require("picocolors"));
 var runCLI = () => {
-  console.log(import_picocolors5.default.green("\u542F\u52A8 future-coder-cli" + process.argv));
+  console.log(import_picocolors5.default.green("\u542F\u52A8 future-coder-cli"));
+  console.log(import_picocolors5.default.blue("\u53C2\u6570\u662F\uFF1A" + process.argv));
   import_commander2.program.parse(process.argv);
 };
 // Annotate the CommonJS export names for ESM import in node:
