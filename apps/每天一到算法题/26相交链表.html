@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /**
+         * 相交链表
+         * 
+         * 双指针法：
+         * 1. 定义两个指针，分别指向两个链表的头节点。
+         * 2. 同时遍历两个链表，如果两个指针指向的节点相同，则返回该节点。
+         * 3. 如果两个指针指向的节点不同，则将两个指针分别指向两个链表的下一个节点。
+         * 4. 如果两个指针都遍历完了，则返回 null。
+         * 
+         * 思路：
+         * 1. 如果两个链表相交，则两个链表的最后一个节点是相同的。
+         * 2. 如果两个链表不相交，则两个链表的最后一个节点是不同的。
+         * 3. 所以，我们可以先遍历两个链表，找到两个链表的最后一个节点。
+         * 4. 如果两个链表的最后一个节点是相同的，则两个链表相交。
+         * 5. 如果两个链表的最后一个节点是不同的，则两个链表不相交。
+         * 
+         * 时间复杂度 O(m + n)
+         * 空间复杂度 O(1), 因为没有占用别的，只是定义了两个指针
+         * 
+        */
+        function getIntersectionNode(headA, headB) {
+            if(!headA || !headB) return null;
+
+            let pA = headA;
+            let pB = headB;
+
+            while(pA !== pB) {
+                pA = pA === null ? headB : pA.next;
+                pB = pB === null ? headA : pB.next;
+            }
+
+            return pA;
+        }
+    </script>
+</body>
+</html>
