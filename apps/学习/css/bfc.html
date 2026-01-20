@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .container {
+            border: 2px solid red;
+            overflow: hidden;
+            /* 触发BFC */
+        }
+
+        .box {
+            width: 100px;
+            height: 100px;
+            background-color: blue;
+            float: left;
+        }
+
+        .box1 {
+            width: 100px;
+            height: 100px;
+            background: red;
+            margin-bottom: 20px;
+        }
+
+        .box2 {
+            width: 100px;
+            height: 100px;
+            background: blue;
+            margin-top: 30px;
+        }
+
+        .bfc-wrapper {
+            overflow: hidden;
+            /* 触发 BFC */
+        }
+
+        .float-box {
+            width: 100px;
+            height: 100px;
+            background: red;
+            float: left;
+        }
+
+        .normal-box {
+            width: 200px;
+            height: 200px;
+            background: blue;
+            /* 会被浮动元素覆盖左侧区域 */
+            overflow: hidden;
+            /* 触发 BFC */
+        }
+
+        .col1 {
+            width: 100px;
+            float: left;
+            background: red;
+        }
+
+        .col2 {
+            width: 100px;
+            float: left;
+            background: green;
+        }
+
+        .col3 {
+            background: blue;
+            /* 希望自适应剩余宽度 */
+           
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="box"></div>
+    </div>
+    <div class="box1"></div>
+    <div class="bfc-wrapper">
+        <div class="box2"></div>
+    </div>
+
+    <div class="float-box"></div>
+    <div class="normal-box"></div>
+
+    <div class="col1">列1</div>
+    <div class="col2">列2</div>
+    <div class="col3">列3（自适应）</div>
+</body>
+
+</html>

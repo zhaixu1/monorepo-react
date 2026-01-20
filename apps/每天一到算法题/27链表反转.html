@@ -1,22 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+
 <body>
     <script>
-        function reverseList(head) {
-            let prev = null;
-            let current = head;
-            while(current !== null) {
-                let next = current.next;  // next 代表写一个
-                current.next = prev;
 
-                
+        /**
+            * 定义链表节点
+        */
+        class ListNode {
+            constructor(val = 0, next = null) {
+                this.val = val;
+                this.next = next;
             }
         }
+
+
+        function reverseList(head) {
+            let prev = null; // 前驱节点
+            let current = head; // 当前节点
+            /***
+             *  设置 prev = null； current = head，
+             *  循环：判断current是否为null，如果不为null，则执行以下操作：
+             *        next 赋值为 current.next
+             *       current.next 赋值为 prev; 
+             *         
+             */
+            while (current !== null) {
+                // 遍历 head，一直替换当前节点以及 上一个节点。
+                let next = current.next;  // next 代表写一个
+                current.next = prev; // 当前节点的next指向前驱节点
+
+                prev = current; // 将当前节点赋值给前驱节点
+                current = next; // 将下一个节点赋值给当前节点
+
+            }
+            return prev;
+        }
+
+        // 创建链表: 1 -> 2 -> 3 -> 4 -> 5
+        const list = new ListNode(1, new ListNode(2, new ListNode(3, new ListNode(4, new ListNode(5)))));
+
+        console.log("原链表结构:");
+        console.dir(list, { depth: null });
+
+        const reversed = reverseList(list);
+
+        console.log("反转后结构:");
+        console.dir(reversed, { depth: null });
     </script>
 </body>
+
 </html>
