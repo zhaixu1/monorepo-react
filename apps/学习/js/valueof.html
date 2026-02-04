@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        var a = undefined
+        a = {
+            value: 0,
+            valueOf() {
+                console.log(this.value);
+
+                return ++this.value
+            }
+        }
+        if (a == 1 && a == 2 && a == 3) {
+            console.log('true');
+        } else {
+            console.log('false');
+        }
+
+
+        Number.prototype.myAdd = function (value) {
+            console.log(this, 'this');
+
+            return this + value;
+        }
+        let num = 1;
+        console.log(num.myAdd(2), '1.myAdd(2)');
+
+        /**
+         * 某公司 1 到 12 月份的销售额存在一个对象里面 如下：{1:222, 2:123, 5:888}，
+           请把数据处理为如下结构：[222, 123, null, null, 888, null, null, null, null, null, null, null]
+        */
+        let sales = {1:222, 2:123, 5:888};
+
+        function handleSales(sales) {
+            return Array.from({length: 13}).map((item, index) => {
+                console.log(sales[index], 'index');
+                
+                return sales[index] || null;
+            }).slice(1)
+        }
+
+        console.log(handleSales(sales), 'handleSales(sales)');
+        
+    </script>
+</body>
+
+</html>

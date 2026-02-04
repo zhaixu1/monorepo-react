@@ -1,11 +1,102 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+
 <body>
-    
+    <script>
+
+
+        /**
+         * 回文链表
+         * 
+         * 时间复杂度： O(n)
+         * 空间复杂度 O(1)
+         * 
+         * 思路：
+         * 1. 使用快慢指针找到链表中间节点
+         * 2. 反转链表后半部分
+         * 3. 对比前半部分和反转后的后半部分
+         * 4. 恢复链表
+         * 5. 返回结果
+         * 
+        */
+
+        // 反转链表
+        function reverseList(head) {
+            let prev = null;
+            let current = head;
+
+            while(current !== null) {
+                let next = current.next;
+                current.next = prev;
+
+                prev = current;
+                current = next;
+            }
+
+            return prev;
+        }
+
+
+        function isPalindrome(head) {
+            // 处理边界情况
+            if(head === null || head.next === null) return true;
+
+            // 步骤1，使用快慢指针找到链表中间节点
+            let slow = head;
+            let fast = head;
+
+            while(fast.next !== null && fast.next.next !== null) {
+                slow = slow.next;   
+                fast = fast.next.next;
+            }
+            // 步骤2 反转 slow 的后半部分并给 secondHalfHead 赋值临时变量
+            let secondHalf = reverseList(slow.next);
+            let secondHalfHead = secondHalf;
+
+            // 步骤3： 对比前半段和反转的后半段
+            let isPalin = true;
+            let firstHalf = head;
+            while(secondHalf !== null) {
+                if(firstHalf.val !== secondHalf.val ) {
+                    isPalin = false;
+                    break;
+                }
+                firstHalf = firstHalf.next;
+                secondHalf = secondHalf.next;
+            }
+            
+            // 恢复链表
+            slow.next = reverseList(secondHalfHead)
+
+            return isPalin;
+
+        }
+
+        class ListNode {
+            constructor(val, next = null) {
+                this.val = val;
+                this.next = next;
+            }
+        }
+
+        // 示例
+        const node1 = new ListNode(1);
+        const node2 = new ListNode(2);
+        const node3 = new ListNode(2);
+        const node4 = new ListNode(1);
+
+        node1.next = node2;
+        node2.next = node3;
+        // node3.next = node4;
+
+        console.log(isPalindrome(node1));
+    </script>
 </body>
+
 </html>

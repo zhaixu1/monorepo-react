@@ -30,7 +30,8 @@
                     if (map.has(char)) {
                         start = Math.max(start, map.get(char) + 1); // 这里其实主要是要跳过重复的B
                     }
-
+                    console.log(start, 'start');
+                    
                     // 1. 存入/更新当前字符的索引
                     map.set(char, i);
 
@@ -41,12 +42,12 @@
                 return maxLength;
             }
 
-            console.log(longestSubstring("abcabcbb"), "longestSubstring");
-            console.log(longestSubstring("bbbbb"), "longestSubstring");
-            console.log(longestSubstring("pwwkew"), "longestSubstring");
-            console.log(longestSubstring(""), "longestSubstring");
-            console.log(longestSubstring(" "), "longestSubstring");
-            console.log(longestSubstring("au"), "longestSubstring");
+            console.log(longestSubstring("abcadbcbb"), "longestSubstring");
+            // console.log(longestSubstring("bbbbb"), "longestSubstring");
+            // console.log(longestSubstring("pwwkew"), "longestSubstring");
+            // console.log(longestSubstring(""), "longestSubstring");
+            // console.log(longestSubstring(" "), "longestSubstring");
+            // console.log(longestSubstring("au"), "longestSubstring");
         </script>
     </body>
 </html>

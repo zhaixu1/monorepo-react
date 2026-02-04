@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /**
+         * 生成器
+         * 
+         * 
+         * 
+         * 
+         * 
+         */
+        function* steps() {
+            console.log("开始执行");
+            
+            const res1 = yield "第一步";
+            console.log("第一步执行完成", 'res1', res1);
+
+            const res2 = yield "第二步";
+            console.log("第二步执行完成", 'res2', res2);
+
+            return "结束执行";
+            
+
+        }
+
+
+        const gen = steps();
+
+        
+
+        const state1 = gen.next(111)
+        // console.log('state1', state1.value);
+        
+        // const state2 = gen.next(1001)
+        // console.log(state2.value);
+
+        // const state3 = gen.next('已激活')
+        // console.log(state3.value);
+    </script>
+    
+</body>
+</html>
