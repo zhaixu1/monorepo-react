@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /**
+         * 观察者模式
+         * 
+        */
+
+        class Subject {
+            constructor() {
+                this.observers = [];
+            }
+
+            addObserver(observer) {
+                this.observers.push(observer);
+            }
+
+            removeObserver(observer) {
+                this.observers = this.observers.filter(o => o !== observer);
+            }
+
+            notify(message) {
+                this.observers.forEach(observer => observer.update(message));
+            }
+        }
+
+        class Observer {
+            constructor(name) {
+                this.name = name;
+            }
+
+            update(message) {
+                console.log(`${this.name} received message: ${message}`);
+            }
+        }
+
+        const subject = new Subject();
+        const observer1 = new Observer('Observer 1');
+        const observer2 = new Observer('Observer 2');
+
+        subject.addObserver(observer1);
+        subject.addObserver(observer2);
+
+        subject.notify('Hello, observers!');
+
+    </script>
+</body>
+</html>

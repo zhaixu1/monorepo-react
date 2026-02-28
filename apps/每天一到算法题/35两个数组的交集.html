@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /**
+         * 两个数组的交集
+         * 
+         * 
+         * 
+         * 
+         * 
+         */
+        function intersectMap(nums1, nums2) {
+            if(nums1.length > nums2.length) {
+                return intersectMap(nums2, nums1);
+            }
+
+            const map = new Map();
+
+            for(const num of nums1) {
+                map.set(num, (map.get(num) || 0) + 1);
+                console.log(map, 'map');
+            }
+            const result = []; 
+
+            for(const num of nums2) {
+                const count = map.get(num); // 判断num2的是否在num1中出现
+                if(count > 0) {
+                    result.push(num)
+                    map.set(num, count - 1)
+                }
+            }
+
+            return result;
+        }
+
+        const nums1 = [1, 2, 2, 1];
+        const nums2 = [2, 2];
+        console.log('Map方法:', intersectMap(nums1, nums2)); // [2, 2]
+
+        const nums3 = [4, 9, 5];
+        const nums4 = [9, 4, 9, 8, 4];
+        console.log('双指针方法:', intersectMap(nums3, nums4)); // [4, 9]
+    </script>
+</body>
+</html>

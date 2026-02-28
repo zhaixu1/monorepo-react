@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flatten 数组扁平化</title>
+</head>
+<body>
+    <script>
+        const arr = [1, [2, [3, 4, [5]]], 6];
+        console.log('原始数组:', arr);
+
+        // ==========================================
+        // 方法 1: ES6 原生 flat (最简单)
+        // ==========================================
+        // Infinity 表示展开所有层级
+        const res1 = arr.flat(Infinity); 
+        console.log('1. ES6 flat:', res1);
+
+
+        // ==========================================
+        // 方法 2: 递归实现 (面试常考)
+        // ==========================================
+        function flattenRecursion(arr) {
+            let result = [];
+            for(let i = 0; i < arr.length; i++) {
+                if(Array.isArray(arr[i])) {
+                    // 如果是数组，递归调用，并将结果拼接到 result
+                    result = result.concat(flattenRecursion(arr[i]));
+                } else {
+                    // 如果不是数组，直接推入
+                    result.push(arr[i]);
+                }
+            }
+            return result;
+        }
+        console.log('2. 递归实现:', flattenRecursion(arr));
+
+
+        // ==========================================
+        // 方法 3: reduce 实现 (高逼格)
+        // ==========================================
+        function flattenReduce(arr) {
+            return arr.reduce((pre, cur) => {
+                // 如果当前元素是数组，递归调用；否则直接合并
+                return pre.concat(Array.isArray(cur) ? flattenReduce(cur) : cur);
+            }, []);
+        }
+        console.log('3. reduce实现:', flattenReduce(arr));
+
+
+        // ==========================================
+        // 方法 4: 扩展运算符 + some (层级少时好用)
+        // ==========================================
+        function flattenSome(arr) {
+            let result = [...arr];
+            // 只要数组里还有数组，就展开一层
+            while (result.some(item => Array.isArray(item))) {
+                result = [].concat(...result);
+            }
+            return result;
+        }
+        console.log('4. while+some实现:', flattenSome(arr));
+
+    </script>
+</body>
+</html>
+
