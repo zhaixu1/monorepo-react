@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CacheStorage 单独使用 Demo</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        #status {
+            margin-top: 10px;
+            color: #666;
+        }
+
+        #result-area {
+            margin-top: 20px;
+            border: 1px dashed #ccc;
+            padding: 10px;
+            min-height: 100px;
+        }
+
+        img {
+            max-width: 300px;
+            display: block;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>CacheStorage 独立使用示例</h1>
+    <p>打开控制台(F12) -> Application -> Cache Storage 可以查看存储情况</p>
+
+    <div>
+        <button id="btn-save">1. 下载并缓存图片</button>
+        <button id="btn-load">2. 从缓存读取图片</button>
+        <button id="btn-delete">3. 清除缓存</button>
+    </div>
+
+    <div id="status"></div>
+    <div id="result-area">图片将显示在这里...</div>
+
+    <script>
+        /*
+        使用 CacheStorage 的关键步骤：
+
+        1. 打开或创建一个缓存
+           const cache = await caches.open('缓存名称');
+
+        2. 添加资源到缓存
+           await cache.add('资源URL');  // 或 cache.put(request, response);
+
+        3. 从缓存中读取资源
+           const response = await cache.match('资源URL');
+           if (response) {
+               // 命中缓存，可以处理 response
+           }
+
+        4. 删除缓存或指定资源
+           await caches.delete('缓存名称');         // 删除整个缓存
+           await cache.delete('资源URL');          // 删除某个资源
+
+        所有操作均为异步，需要使用 async/await 或 then 处理 Promise。
+        */
+        const CACHE_NAME = 'my-image-cache-v1';
+        // 我们要缓存的资源 URL (这里用一张随机图片)
+        const IMG_URL = 'https://picsum.photos/300/200';
+
+        const statusDiv = document.getElementById('status');
+        const resultDiv = document.getElementById('result-area');
+
+        function log(msg) {
+            statusDiv.innerHTML += `<div>[${new Date().toLocaleTimeString()}] ${msg}</div>`;
+        }
+
+        // 1. 存：下载并写入 CacheStorage
+        document.getElementById('btn-save').onclick = async () => {
+            try {
+                // 打开缓存库（如果没有会自动创建）
+                const cache = await caches.open(CACHE_NAME);
+
+                log('正在请求图片...');
+                // cache.add() 会自动发起 fetch 请求，并把 response 存进去
+                // 注意：如果跨域图片没有 CORS 头，add() 可能会失败。
+                // 这里的 picsum.photos 通常支持 CORS。
+                await cache.add(IMG_URL);
+
+                log('✅ 图片已成功存入 CacheStorage！');
+            } catch (err) {
+                console.error(err);
+                log('❌ 缓存失败: ' + err.message);
+            }
+        };
+
+        // 2. 取：从 CacheStorage 读取
+        document.getElementById('btn-load').onclick = async () => {
+            try {
+                // 打开缓存库
+                const cache = await caches.open(CACHE_NAME);
+
+                // 查找匹配的请求
+                const response = await cache.match(IMG_URL);
+
+                if (response) {
+                    log('✅ 命中缓存！正在读取 Blob...');
+                    // 把响应流转成 Blob 图片
+                    const blob = await response.blob();
+                    const imgUrl = URL.createObjectURL(blob);
+
+                    // 显示图片
+                    resultDiv.innerHTML = `<img src="${imgUrl}" alt="Cached Image">`;
+                    resultDiv.innerHTML += `<p>来源: CacheStorage (非网络请求)</p>`;
+                } else {
+                    log('⚠️ 未找到缓存，请先点击“保存”按钮。');
+                    resultDiv.innerText = '未找到缓存图片';
+                }
+            } catch (err) {
+                log('❌ 读取失败: ' + err.message);
+            }
+        };
+
+        // 3. 删：删除整个缓存库
+        document.getElementById('btn-delete').onclick = async () => {
+            const success = await caches.delete(CACHE_NAME);
+            if (success) {
+                log('🗑️ 缓存库已删除');
+                resultDiv.innerHTML = '';
+            } else {
+                log('⚠️ 删除失败或缓存不存在');
+            }
+        };
+    </script>
+</body>
+
+</html>

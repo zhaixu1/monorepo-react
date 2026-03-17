@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        class ListNode {
+            constructor(val, next = null) {
+                this.val = val;
+                this.next = next;
+            }
+        }
+        /*
+         * 链表两数相加
+         * 
+         * 时间复杂度：O(max(m, n)) - m 和 n 分别是两个链表的长度
+         * 空间复杂度：O(1) - 只需要常数级别的额外空间
+         * 
+         * 
+         * 
+        */
+        function addTwoNumbers(l1, l2) {
+            const dummyHead = new ListNode(0);
+            console.log(dummyHead, 'dummyHead');
+            console.log(l1, 'l1');
+            console.log(l2, 'l2');
+
+            let current = dummyHead;
+
+            let carry = 0; //进位
+
+            while(l1 !== null || l2 !== null || carry !== 0) {
+                const val1 = l1 !== null ? l1.val : 0;
+                const val2 = l2 !== null ? l2.val : 0;
+
+                // 计算当前位的和
+                const sum = val1 + val2 + carry;
+
+                const digit = sum % 10;
+
+                carry = Math.floor(sum / 10);
+
+                current.next = new ListNode(digit);
+
+                current = current.next;
+
+                l1 = l1 !== null ? l1.next : null;
+                l2 = l2 !== null ? l2.next : null;
+            }
+
+            return dummyHead.next;
+        }
+
+        // ================= 测试辅助代码 =================
+
+        // 1. 数组转链表
+        function arrayToList(arr) {
+            const dummy = new ListNode(0);
+            let cur = dummy;
+            for(let val of arr) {
+                cur.next = new ListNode(val);
+                cur = cur.next;
+            }
+            return dummy.next;
+        }
+
+        // 2. 链表转数组（方便打印）
+        function listToArray(head) {
+            const res = [];
+            while(head) {
+                res.push(head.val);
+                head = head.next;
+            }
+            return res;
+        }
+
+        // ================= 运行实例 =================
+        
+        console.log('--- 实例 1: 342 + 465 = 807 ---');
+        // l1: 2 -> 4 -> 3 (342)
+        // l2: 5 -> 6 -> 4 (465)
+        const l1 = arrayToList([2, 4, 3]);
+        const l2 = arrayToList([5, 6, 4]);
+        
+        const result1 = addTwoNumbers(l1, l2);
+        console.log('输入:', [2,4,3], [5,6,4]);
+        console.log('结果:', listToArray(result1)); // 预期 [7, 0, 8]
+
+
+        console.log('--- 实例 2: 99 + 1 = 100 (连续进位) ---');
+        // l3: 9 -> 9 (99)
+        // l4: 1 (1)
+        const l3 = arrayToList([9, 9]);
+        const l4 = arrayToList([1]);
+
+        const result2 = addTwoNumbers(l3, l4);
+        console.log('输入:', [9,9], [1]);
+        console.log('结果:', listToArray(result2)); // 预期 [0, 0, 1]
+    </script>
+</body>
+</html>

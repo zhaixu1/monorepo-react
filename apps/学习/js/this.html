@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function Foo() {
+            Foo.a = function () {
+                console.log(1);
+            }
+            this.a = function () {
+                console.log(2);
+            }
+        }
+        // console.log(Foo.a, 'Foo.a()');
+        // Foo()
+        // Foo.a()
+        Foo.prototype.a = function () {
+            console.log(3);
+        }
+        Foo.a = function () {
+            console.log(4);
+        }
+        Foo.a();
+        Foo.a()
+
+        function changeObjProperty(o) {
+            o.siteUrl = "http://www.baidu.com"
+            o = new Object()
+            o.siteUrl = "http://www.google.com"
+        }
+        let webSite = new Object();
+        changeObjProperty(webSite);
+        console.log(webSite.siteUrl);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <script>
+
+        class ListNode {
+            constructor(val, next = null) {
+                this.val = val;
+                this.next = next;
+            }
+        }
+
+        function removeNthFromEnd(head, n) {
+            const dummy = new ListNode(0, head);
+
+            let fast = dummy;
+            let slow = dummy;
+
+            for(let i = 0; i < n; i++) {
+                if(fast.next === null) return dummy.next; // 如果fast.next为空，则说明n大于链表长度，返回dummy.next
+                fast = fast.next;
+            }
+
+            while (fast.next !== null) {
+                fast = fast.next;
+                slow = slow.next;
+            }
+
+            slow.next = slow.next.next;
+            return dummy.next;
+        }
+    </script>
+</body>
+</html>

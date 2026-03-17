@@ -3,30 +3,319 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Bind 参数合并演示</title>
+        <title>Bind 参数合并演示 + 纯JS性能测试</title>
     </head>
     <body>
-        <h2>打开控制台查看 bind 参数合并演示</h2>
+        <h2>Bind 参数合并演示 + 纯JavaScript性能分析测试</h2>
+        <p>1. 打开控制台查看 bind 参数合并演示</p>
+        <p>2. 打开开发者工具的 <strong>Performance</strong> 面板进行纯JavaScript性能分析</p>
+        <p>3. 所有测试都是纯JavaScript计算，不涉及DOM渲染</p>
         <script>
-            // 原始函数：用来打印它最终接收到了什么参数
-            function originalFn(...args) {
-                console.log("✅ 原始函数执行了，收到的完整参数:", args);
+            Function.prototype.myCall = function(context = null, ...args) {
+                // 1. 如果 context 是基础类型（如字符串），需要包装成对象，否则无法添加属性
+                // 注意：传入 null/undefined 时，context 默认为 window (ES5) 或 globalThis
+                if (context === null || context === undefined) {
+                    context = window;
+                } else {
+                    context = Object(context); 
+                }
+
+                // 2. 使用 Symbol 创建唯一属性名，防止覆盖 context 原有的 fn 属性
+                const fnSymbol = Symbol('fn');
+                
+                // 3. 将当前函数（this）挂载到 context 上
+                context[fnSymbol] = this;
+
+                // 4. 执行函数并获取返回值
+                const result = context[fnSymbol](...args);
+
+                // 5. 删除临时属性
+                delete context[fnSymbol];
+
+                return result;
             }
 
-            console.log("--- 步骤 1: 创建 bind 函数 ---");
-            // 使用 bind 创建一个新函数，预置参数 1 和 2
-            // 这里的 ...args 相当于柯里化里的“老参数”
-            const boundFn = originalFn.bind(null, 1, 2);
-            console.log("已创建 boundFn，它'记住'了参数: [1, 2]");
+            function introduce(age, hobby) {
+                // 注意：这里的 this.name 取决于传入的 context
+                let info = `My name is ${this.name || this}, I am ${age} years old, my hobby is ${hobby}`;
+                console.log(info);
+                return info;
+            }
 
-            console.log("\n--- 步骤 2: 调用 bind 函数 ---");
-            // 调用这个新函数，传入参数 3
-            // 这里的 3 相当于柯里化里的“新参数”
-            console.log("执行 boundFn(3)...");
-            const boundFn2 = boundFn.bind(null, 3)
-            boundFn2(4)
-            // 预期结果：originalFn 接收到 [1, 2, 3]
-            // 证明：bind 内部机制自动把 [1, 2] 和 [3] 拼接到了一起
+            const person = { name: 'zx' };
+
+            // 测试 1: 传入对象作为 this
+            console.log('--- 测试对象 ---');
+            introduce.myCall(person, 18, 'reading');
+
+            // 测试 2: 传入字符串作为 this (会被包装成 String 对象)
+            console.log('--- 测试字符串 ---');
+            introduce.myCall('Alice', 20, 'coding');
+
+
+
+            Function.prototype.myApply = function(context = null, args = []) {
+                if (context === null || context === undefined) {
+                    context = window;
+                }else {
+                    context = Object(context);
+                }
+
+                const fnSymbol = Symbol('fn');
+
+                context[fnSymbol] = this;
+
+                const result = context[fnSymbol](...args);
+
+                delete context[fnSymbol];
+
+                return result;
+            }
+
+            Function.prototype.myBind = function(context = null, ...args) {
+                if (context === null || context === undefined) {
+                    context = window;
+                }else {
+                    context = Object(context);
+                }
+
+                const fnSymbol = Symbol('fn');
+
+                context[fnSymbol] = this;
+
+                return function(...newArgs) {
+                    return context[fnSymbol](...args, ...newArgs);
+                }
+            }
+
+            // === 性能测试代码 ===
+
+            // 1. CPU 密集型任务：计算斐波那契数列（递归版本 - 效率低）
+            function slowFibonacci(n) {
+                function fib(num) {
+                    if (num <= 1) return num;
+                    return fib(num - 1) + fib(num - 2);
+                }
+
+                const result = fib(n);
+                return result;
+            }
+
+            // 2. 字符串密集型操作（大量字符串拼接和处理）
+            function stringIntensiveOperations() {
+                let result = '';
+                const baseString = 'JavaScript性能测试';
+
+                // 大量字符串拼接（性能较差的方式）
+                for (let i = 0; i < 50000; i++) {
+                    result += `${baseString}_${i}_${Math.random().toString(36)}_`;
+                }
+
+                // 字符串查找和替换
+                result = result.replace(/JavaScript/g, 'JS');
+                const matches = result.match(/\d+/g);
+
+                // 字符串分割和处理
+                const parts = result.split('_').filter(part => part.length > 3);
+
+                return { length: result.length, matches: matches?.length || 0 };
+            }
+
+            // 3. 内存密集型任务：创建大数组并进行复杂计算
+            function memoryIntensiveTask() {
+                // 创建大数组
+                const bigArray = new Array(100000).fill(0).map((_, i) => ({
+                    id: i,
+                    value: Math.random() * 1000,
+                    nested: {
+                        data: new Array(10).fill(0).map(() => Math.random())
+                    }
+                }));
+
+                // 复杂的数组操作
+                const result = bigArray
+                    .filter(item => item.value > 500)
+                    .map(item => ({
+                        ...item,
+                        computed: item.nested.data.reduce((sum, val) => sum + val, 0)
+                    }))
+                    .sort((a, b) => b.computed - a.computed)
+                    .slice(0, 100);
+
+                return result;
+            }
+
+            // 4. 异步任务性能测试
+            async function asyncPerformanceTest() {
+                const promises = [];
+
+                // 创建多个异步任务
+                for (let i = 0; i < 50; i++) {
+                    promises.push(
+                        new Promise((resolve) => {
+                            setTimeout(() => {
+                                // 模拟异步计算
+                                let sum = 0;
+                                for (let j = 0; j < 10000; j++) {
+                                    sum += Math.sqrt(j) * Math.sin(j);
+                                }
+                                resolve(sum);
+                            }, Math.random() * 100);
+                        })
+                    );
+                }
+
+                const results = await Promise.all(promises);
+                return results;
+            }
+
+            // 5. 正则表达式密集型任务
+            function regexIntensiveTask() {
+                // 生成测试数据
+                const textData = [];
+                for (let i = 0; i < 10000; i++) {
+                    textData.push(`用户${i}的邮箱是user${i}@example.com，电话号码是1380013${i.toString().padStart(4, '0')}`);
+                }
+
+                const fullText = textData.join('\n');
+
+                // 复杂的正则表达式操作
+                const emailRegex = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
+                const phoneRegex = /1[3-9]\d{9}/g;
+                const userRegex = /用户(\d+)/g;
+
+                const emails = fullText.match(emailRegex) || [];
+                const phones = fullText.match(phoneRegex) || [];
+
+                // 多次正则替换
+                let processedText = fullText
+                    .replace(emailRegex, '[邮箱]')
+                    .replace(phoneRegex, '[电话]')
+                    .replace(userRegex, '用户[ID:$1]');
+
+                return { emails: emails.length, phones: phones.length };
+            }
+
+            // 6. JSON 序列化/反序列化密集型任务
+            function jsonIntensiveTask() {
+                // 创建复杂的嵌套对象
+                function createComplexObject(depth, width) {
+                    if (depth === 0) {
+                        return {
+                            id: Math.random(),
+                            name: `object_${Math.random().toString(36).substr(2, 9)}`,
+                            timestamp: Date.now(),
+                            data: new Array(100).fill(0).map(() => Math.random())
+                        };
+                    }
+
+                    const obj = {};
+                    for (let i = 0; i < width; i++) {
+                        obj[`child_${i}`] = createComplexObject(depth - 1, width);
+                    }
+                    return obj;
+                }
+
+                // 创建深层嵌套对象
+                const complexObject = createComplexObject(4, 5);
+
+                // 大量 JSON 序列化和反序列化
+                const results = [];
+                for (let i = 0; i < 100; i++) {
+                    const jsonString = JSON.stringify(complexObject);
+                    const parsed = JSON.parse(jsonString);
+                    results.push(parsed);
+                }
+
+                return results.length;
+            }
+
+            // 7. 数学计算密集型任务
+            function mathIntensiveTask() {
+                let sum = 0;
+                const iterations = 1000000;
+
+                // 复杂的数学运算
+                for (let i = 0; i < iterations; i++) {
+                    sum += Math.sqrt(i) * Math.sin(i) * Math.cos(i) + Math.log(i + 1);
+                }
+
+                // 矩阵运算模拟
+                const matrix = [];
+                for (let i = 0; i < 100; i++) {
+                    matrix[i] = new Array(100).fill(0).map(() => Math.random());
+                }
+
+                // 简单的矩阵乘法
+                const result = [];
+                for (let i = 0; i < 100; i++) {
+                    result[i] = [];
+                    for (let j = 0; j < 100; j++) {
+                        let sum = 0;
+                        for (let k = 0; k < 100; k++) {
+                            sum += matrix[i][k] * matrix[k][j];
+                        }
+                        result[i][j] = sum;
+                    }
+                }
+
+                return sum;
+            }
+
+            // 添加按钮来触发性能测试
+            function addPerformanceTestButtons() {
+                const buttonsContainer = document.createElement('div');
+                buttonsContainer.style.margin = '20px';
+                buttonsContainer.innerHTML = `
+                    <h3>纯JavaScript性能测试 (打开开发者工具的 Performance 面板进行分析)</h3>
+                    <button id="fibonacci-btn">斐波那契数列 (CPU密集)</button>
+                    <button id="string-btn">字符串操作 (字符串密集)</button>
+                    <button id="memory-btn">数组处理 (内存密集)</button>
+                    <button id="async-btn">异步任务测试</button>
+                    <button id="regex-btn">正则表达式处理</button>
+                    <button id="json-btn">JSON序列化处理</button>
+                    <button id="math-btn">数学计算</button>
+                    <button id="all-btn">运行所有JS测试</button>
+                `;
+
+                document.body.appendChild(buttonsContainer);
+
+                // 绑定事件
+                document.getElementById('fibonacci-btn').onclick = () => slowFibonacci(35);
+                document.getElementById('string-btn').onclick = stringIntensiveOperations;
+                document.getElementById('memory-btn').onclick = memoryIntensiveTask;
+                document.getElementById('async-btn').onclick = asyncPerformanceTest;
+                document.getElementById('regex-btn').onclick = regexIntensiveTask;
+                document.getElementById('json-btn').onclick = jsonIntensiveTask;
+                document.getElementById('math-btn').onclick = mathIntensiveTask;
+                document.getElementById('all-btn').onclick = runAllTests;
+            }
+
+            // 运行所有测试
+            async function runAllTests() {
+                slowFibonacci(30);
+                stringIntensiveOperations();
+                memoryIntensiveTask();
+                regexIntensiveTask();
+                jsonIntensiveTask();
+                mathIntensiveTask();
+                await asyncPerformanceTest();
+            }
+
+            // 页面加载完成后添加按钮
+            document.addEventListener('DOMContentLoaded', addPerformanceTestButtons);
+
+
+            Function.prototype.myCall = function(context = null, ...args) {
+                if (context === null || context === undefined) {
+                    context = window;
+                } 
+
+                context.fn = this;
+                const result = context.fn(...args);
+                delete context.fn;
+                return result;
+            }
         </script>
     </body>
 </html>

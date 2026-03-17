@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /**
+         * 两两交换链表中的节点（LeetCode 24）
+         *
+         * 题意：给定一个链表，两两交换其中相邻的节点，并返回交换后的链表。
+         * 注意：是“交换节点”，不是只交换节点的值。
+         *
+         * 核心思路：虚拟头节点 dummy + 指针操作
+         * 每次处理一对 (a, b)：
+         * prev -> a -> b -> next
+         * 交换后：
+         * prev -> b -> a -> next
+         *
+         * 时间复杂度：O(n)
+         * 空间复杂度：O(1)
+         */
+
+        class ListNode {
+            constructor(val, next = null) {
+                this.val = val;
+                this.next = next;
+            }
+        }
+
+        function swapPairs(head) {
+            const dummy = new ListNode(0, head);
+            let prev = dummy;
+
+            // prev 后面至少要有两个节点，才能交换一对
+            while (prev.next !== null && prev.next.next !== null) {
+                const a = prev.next;      // 第一位
+                const b = a.next;         // 第二位
+                const next = b.next;      // 下一段的头
+
+                // 指针交换（核心三步）
+                prev.next = b;
+                b.next = a;
+                a.next = next;
+
+                // prev 移动到交换后的尾巴 a，继续处理下一对
+                prev = a;
+            }
+
+            return dummy.next;
+        }
+
+        // --------- 测试辅助函数 ---------
+        function arrayToList(arr) {
+            const dummy = new ListNode(0);
+            let cur = dummy;
+            for (const v of arr) {
+                cur.next = new ListNode(v);
+                cur = cur.next;
+            }
+            return dummy.next;
+        }
+
+        function listToArray(head) {
+            const res = [];
+            let cur = head;
+            while (cur) {
+                res.push(cur.val);
+                cur = cur.next;
+            }
+            return res;
+        }
+
+        // --------- 测试用例（打开控制台看输出）---------
+        console.log('case1:', listToArray(swapPairs(arrayToList([1, 2, 3, 4])))); // [2,1,4,3]
+        console.log('case2:', listToArray(swapPairs(arrayToList([1, 2, 3]))));    // [2,1,3]
+        console.log('case3:', listToArray(swapPairs(arrayToList([]))));           // []
+        console.log('case4:', listToArray(swapPairs(arrayToList([1]))));          // [1]
+    </script>
+</body>
+</html>
