@@ -1,0 +1,273 @@
+.medical-record-container {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  padding: 20px;
+}
+
+.medical-record-header {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.medical-record-header h1 {
+  margin: 0;
+  color: #2c3e50;
+  font-size: 28px;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.print-btn {
+  background-color: #3498db !important;
+  color: white !important;
+  border: none !important;
+  padding: 10px 20px !important;
+  border-radius: 5px !important;
+  cursor: pointer !important;
+  font-size: 14px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  transition: background-color 0.3s ease !important;
+}
+
+.print-btn:hover {
+  background-color: #2980b9 !important;
+}
+
+.print-btn:disabled {
+  background-color: #bdc3c7 !important;
+  cursor: not-allowed !important;
+}
+
+.medical-record-content {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 20px;
+  height: calc(100vh - 160px);
+}
+
+/* 左侧病历列表样式 */
+.record-list {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  height: fit-content;
+  max-height: 100%;
+  overflow-y: auto;
+}
+
+.record-list h3 {
+  margin: 0 0 15px 0;
+  color: #2c3e50;
+  font-size: 18px;
+  border-bottom: 2px solid #ecf0f1;
+  padding-bottom: 10px;
+}
+
+.record-item {
+  padding: 12px;
+  border: 1px solid #ecf0f1;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: #fafafa;
+}
+
+.record-item:hover {
+  background: #e3f2fd;
+  border-color: #2196f3;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.record-item.active {
+  background: #e8f5e8;
+  border-color: #4caf50;
+  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.2);
+}
+
+.record-patient {
+  font-weight: bold;
+  font-size: 16px;
+  color: #2c3e50;
+  margin-bottom: 4px;
+}
+
+.record-date {
+  font-size: 14px;
+  color: #7f8c8d;
+  margin-bottom: 2px;
+}
+
+.record-department {
+  font-size: 12px;
+  color: #95a5a6;
+}
+
+/* 右侧病历详情样式 */
+.record-detail {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+}
+
+.record-display {
+  padding: 30px;
+}
+
+.print-header {
+  text-align: center;
+  border-bottom: 2px solid #34495e;
+  padding-bottom: 15px;
+  margin-bottom: 25px;
+}
+
+.print-title {
+  font-size: 28px;
+  font-weight: bold;
+  color: #2c3e50;
+  margin-bottom: 8px;
+}
+
+.patient-info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-bottom: 25px;
+  padding: 20px;
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+}
+
+.info-label {
+  font-weight: bold;
+  width: 90px;
+  flex-shrink: 0;
+  color: #495057;
+}
+
+.section {
+  margin-bottom: 25px;
+  padding: 20px;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.section-title {
+  font-weight: bold;
+  font-size: 18px;
+  color: #2c3e50;
+  border-bottom: 2px solid #3498db;
+  padding-bottom: 8px;
+  margin-bottom: 15px;
+}
+
+.prescription-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.prescription-list li {
+  padding: 8px 0;
+  border-bottom: 1px dotted #ccc;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.prescription-list li:last-child {
+  border-bottom: none;
+}
+
+.print-footer {
+  margin-top: 40px;
+  border-top: 2px solid #34495e;
+  padding-top: 20px;
+  text-align: right;
+  color: #7f8c8d;
+}
+
+.no-record-selected {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  color: #7f8c8d;
+  font-size: 18px;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .medical-record-content {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .record-list {
+    max-height: 200px;
+  }
+
+  .patient-info {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .medical-record-header {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+}
+
+/* 打印样式 */
+@media print {
+  .medical-record-container {
+    background: white;
+    padding: 0;
+  }
+
+  .medical-record-header,
+  .record-list,
+  .action-buttons {
+    display: none !important;
+  }
+
+  .medical-record-content {
+    grid-template-columns: 1fr;
+    gap: 0;
+    height: auto;
+  }
+
+  .record-detail {
+    box-shadow: none;
+    border-radius: 0;
+  }
+
+  .record-display {
+    padding: 20px;
+  }
+
+  .section {
+    break-inside: avoid;
+  }
+}

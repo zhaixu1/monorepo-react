@@ -4,6 +4,7 @@ import { Outlet, RouteObject } from "react-router-dom";
 
 import Home from "../pages/home/index";
 import RecommendList from "../components/RecommendList";
+import ElectronicMedicalRecord from "../pages/ElectronicMedicalRecord";
 import { TextEllipsis, Button } from "zxreact-components";
 import 'zxreact-components/dist/index.css'
 import { useToggle } from "zxreact-hooks";
@@ -31,6 +32,11 @@ export const router = [
     ],
   },
   { path: 'hot', element: <div>热榜</div> },
+  {
+    path: '/medical-record',
+    element: <ElectronicMedicalRecord />,
+    title: '电子病历',
+  },
   {
     path: '/education',
     element: (

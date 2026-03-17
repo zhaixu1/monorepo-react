@@ -9,7 +9,7 @@
         <script>
             /**
              * 缺失的第一个正数
-             * 
+             * 让每个正整数 i 都放在 索引 i - 1 的位置上
              * 
              *
              * 给你一个未排序的整数数组 nums ，请你找出其中没有出现的最小的正整数。
@@ -29,6 +29,7 @@
                 for(let i = 0; i < n; i++) {
 
                     while(nums[i] >= 1 && nums[i] <= n && nums[i] !== nums[nums[i] - 1]) {
+                        // 当num[i] 大于等于1 并且 num[i] 小于等于n 并且 num[i] 不等于 num[num[i] - 1] 时，进行元素交换
                         const correctIndex = nums[i] - 1; // 获取当前元素应该在那个位置上
                         console.log(correctIndex, 'correctIndex');
                         
