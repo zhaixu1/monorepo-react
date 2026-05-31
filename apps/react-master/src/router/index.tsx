@@ -23,6 +23,10 @@ export const router = [
     children: [
       { path: '', element: <RecommendList /> },
       { path: 'follow', element: <div style={{ width: 200}}>
+        <TextEllipsis
+          content="这是一段非常非常非常非常非常非常非常非常非常非常非常非常非常非常非常非常非常非常非常非常长的文字，需要被省略展示在三行以内。"
+          rows={3}
+        />
         <TextEllipsis content="测试一段很长的文字测试一段很长的文字测试一段很长的文字测试一段很长的文字测试一段很长的文字测试一段很长的文字">按钮</TextEllipsis>
       </div> },
       { path: 'hot', element: <div>

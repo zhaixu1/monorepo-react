@@ -1,0 +1,22 @@
+{
+  "name": "zxreact-components-mcp",
+  "version": "1.0.0",
+  "description": "MCP Server for zxreact-components",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "zxreact-mcp": "dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  }
+}
